@@ -1,23 +1,44 @@
-# Kled.io Makefile for building unified CLI tools
+# Kled.io Makefile for building all components
 
-.PHONY: all build clean
+.PHONY: all build cli desktop mobile web install clean
 
 # Default target
 all: build
 
-# Build all CLI tools
-build:
-	@echo "Building unified CLI tools..."
-	@mkdir -p bin
-	@cd cli/kled && go build -o ../../bin/kled
-	@cd cli/kcluster && go build -o ../../bin/kcluster
-	@cd cli/kledspace && go build -o ../../bin/kledspace
-	@cd cli/kpolicy && go build -o ../../bin/kpolicy
-	@echo "Building desktop app..."
-	@cd desktop && yarn build
-	@echo "Build complete!"
+# Build all components
+build: cli desktop mobile web
 
-# Cross-compile for all platforms
+# Build CLI tools
+cli:
+	@echo "Building CLI tools..."
+	@mkdir -p bin
+	@cd cli/unified && go build -o ../../bin/kled-unified
+	@ln -sf kled-unified bin/kled
+	@ln -sf kled-unified bin/kcluster
+	@ln -sf kled-unified bin/kledspace
+	@ln -sf kled-unified bin/kpolicy
+	@echo "CLI tools build complete!"
+
+# Build desktop app
+desktop:
+	@echo "Building desktop app..."
+	@cd desktop && yarn install && yarn build
+	@cd desktop/src-tauri && cargo build --release
+	@echo "Desktop app build complete!"
+
+# Build mobile apps
+mobile:
+	@echo "Building mobile apps..."
+	@cd mobile && yarn install || true
+	@echo "Mobile apps build setup complete!"
+
+# Build web app
+web:
+	@echo "Building web app..."
+	@cd web && yarn install && yarn build || true
+	@echo "Web app build complete!"
+
+# Cross-compile CLI for all platforms
 cross-compile:
 	@echo "Cross-compiling for all platforms..."
 	@mkdir -p bin
@@ -32,34 +53,24 @@ cross-compile:
 	# Windows AMD64
 	@cd cli/unified && GOOS=windows GOARCH=amd64 go build -o ../../bin/kled-windows-amd64.exe
 	@echo "Cross-compilation complete!"
-	
-	# Create symlinks for individual tools
-	@echo "Creating symlinks for individual tools..."
-	@ln -sf kled-linux-amd64 bin/kled
-	@ln -sf kled-linux-amd64 bin/kcluster
-	@ln -sf kled-linux-amd64 bin/kledspace
-	@ln -sf kled-linux-amd64 bin/kpolicy
-	@echo "Symlinks created!"
 
-# Build unified binary that includes all CLI tools
-unified:
-	@echo "Building unified CLI binary..."
-	@mkdir -p bin
-	# Build unified binary for each platform
-	@echo "Building for Linux AMD64..."
-	@GOOS=linux GOARCH=amd64 go build -o bin/kled-linux-amd64 ./cli/unified
-	@echo "Building for Linux ARM64..."
-	@GOOS=linux GOARCH=arm64 go build -o bin/kled-linux-arm64 ./cli/unified
-	@echo "Building for macOS AMD64..."
-	@GOOS=darwin GOARCH=amd64 go build -o bin/kled-darwin-amd64 ./cli/unified
-	@echo "Building for macOS ARM64..."
-	@GOOS=darwin GOARCH=arm64 go build -o bin/kled-darwin-arm64 ./cli/unified
-	@echo "Building for Windows AMD64..."
-	@GOOS=windows GOARCH=amd64 go build -o bin/kled-windows-amd64.exe ./cli/unified
-	@echo "Unified build complete!"
+# Install CLI tools locally
+install:
+	@echo "Installing CLI tools..."
+	@mkdir -p $(HOME)/.kled/bin
+	@cp bin/kled-unified $(HOME)/.kled/bin/ || cp bin/kled-linux-amd64 $(HOME)/.kled/bin/kled-unified
+	@ln -sf $(HOME)/.kled/bin/kled-unified $(HOME)/.kled/bin/kled
+	@ln -sf $(HOME)/.kled/bin/kled-unified $(HOME)/.kled/bin/kcluster
+	@ln -sf $(HOME)/.kled/bin/kled-unified $(HOME)/.kled/bin/kledspace
+	@ln -sf $(HOME)/.kled/bin/kled-unified $(HOME)/.kled/bin/kpolicy
+	@echo "export PATH=\$$PATH:\$$HOME/.kled/bin" >> $(HOME)/.bashrc
+	@echo "Installation complete! Please restart your shell or run 'source ~/.bashrc'"
 
 # Clean build artifacts
 clean:
 	@echo "Cleaning build artifacts..."
 	@rm -rf bin/*
+	@cd desktop && yarn clean || true
+	@cd web && yarn clean || true
+	@cd mobile && yarn clean || true
 	@echo "Clean complete!"

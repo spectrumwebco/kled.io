@@ -1,0 +1,39 @@
+name: Publish Downloads to Website
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Website
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download release assets
+        run: |
+          mkdir -p downloads
+          # Get latest release info
+          RELEASE_ID=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.id')
+          ASSETS=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID/assets)
+          
+          # Download each asset
+          echo "$ASSETS" | jq -r '.[] | .browser_download_url' | while read -r url; do
+            wget -P downloads "$url"
+          done
+
+      - name: Copy files to web/download directory
+        run: |
+          mkdir -p web/download
+          cp -R downloads/* web/download/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./web
+          force_orphan: true
