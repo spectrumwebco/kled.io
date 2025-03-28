@@ -1,11 +1,36 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 )
+
+type Config struct {
+	APIKey     string `json:"apiKey"`
+	APIBaseURL string `json:"apiBaseURL"`
+}
+
+var config Config
+
+func init() {
+	configPath := getConfigPath()
+	if _, err := os.Stat(configPath); err == nil {
+		data, err := os.ReadFile(configPath)
+		if err == nil {
+			_ = json.Unmarshal(data, &config)
+		}
+	}
+
+	if apiKey := os.Getenv("KLED_API_KEY"); apiKey != "" {
+		config.APIKey = apiKey
+	}
+	if apiBaseURL := os.Getenv("KLED_API_BASE_URL"); apiBaseURL != "" {
+		config.APIBaseURL = apiBaseURL
+	}
+}
 
 func main() {
 	execName := filepath.Base(os.Args[0])
@@ -86,4 +111,12 @@ func executeKledSpace() {
 
 func executeKPolicy() {
 	fmt.Println("Executing kpolicy command...")
+}
+
+func getConfigPath() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return ""
+	}
+	return filepath.Join(home, ".kled", "config.json")
 }
