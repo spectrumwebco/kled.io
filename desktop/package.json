@@ -1,0 +1,30 @@
+{
+  "name": "kled-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@tauri-apps/api": "^2.0.0",
+    "framer-motion": "^11.0.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.0.1",
+    "react-router-dom": "^6.22.1"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^0.5.1",
+    "@rsbuild/plugin-react": "^0.5.1",
+    "@tauri-apps/cli": "^2.0.0",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kled.io - Kubernetes Workspace Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .hero {
+            background-color: #f8f9fa;
+            padding: 5rem 0;
+        }
+        .feature-icon {
+            font-size: 2rem;
+            color: #0d6efd;
+            margin-bottom: 1rem;
+        }
+        .cta-section {
+            background-color: #0d6efd;
+            color: white;
+            padding: 3rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Kled.io</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#download">Download</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#docs">Documentation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/spectrumwebco/kled.io">GitHub</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">Kubernetes Workspace Management Made Simple</h1>
+            <p class="lead mb-5">Kled.io provides a unified interface for managing Kubernetes workspaces, clusters, and policies.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#download" class="btn btn-primary btn-lg">Download</a>
+                <a href="#docs" class="btn btn-outline-secondary btn-lg">Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5" id="features">
+        <div class="container">
+            <h2 class="text-center mb-5">Features</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="feature-icon">🖥️</div>
+                        <h3>Desktop App</h3>
+                        <p>Cross-platform desktop application for managing Kubernetes workspaces.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Web App</h3>
+                        <p>Browser-based interface with the same functionality as the desktop app.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="feature-icon">📱</div>
+                        <h3>Mobile Apps</h3>
+                        <p>iOS and Android applications for on-the-go management.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="feature-icon">⌨️</div>
+                        <h3>CLI Tools</h3>
+                        <p>Command-line tools for workspace, cluster, and policy management.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Security</h3>
+                        <p>Built-in security features for managing access and policies.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="feature-icon">🔄</div>
+                        <h3>Automation</h3>
+                        <p>Automate common tasks and workflows with built-in automation tools.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light" id="download">
+        <div class="container">
+            <h2 class="text-center mb-5">Download</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">Desktop App</h3>
+                            <p class="card-text">Available for Windows, macOS, and Linux.</p>
+                            <a href="/download/desktop" class="btn btn-primary">Download</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">CLI Tools</h3>
+                            <p class="card-text">Command-line tools for all platforms.</p>
+                            <a href="/download/cli" class="btn btn-primary">Download</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">Mobile Apps</h3>
+                            <p class="card-text">Available on iOS and Android.</p>
+                            <a href="/download/mobile" class="btn btn-primary">Download</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5" id="docs">
+        <div class="container">
+            <h2 class="text-center mb-5">Documentation</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">Getting Started</h3>
+                            <p class="card-text">Learn how to install and set up Kled.io for your environment.</p>
+                            <a href="/docs/getting-started" class="btn btn-outline-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">API Reference</h3>
+                            <p class="card-text">Detailed documentation for the Kled.io API.</p>
+                            <a href="/docs/api" class="btn btn-outline-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container text-center">
+            <h2 class="mb-4">Ready to Get Started?</h2>
+            <p class="lead mb-4">Join thousands of developers who are already using Kled.io to manage their Kubernetes workspaces.</p>
+            <a href="#download" class="btn btn-light btn-lg">Download Now</a>
+        </div>
+    </section>
+
+    <footer class="py-4 bg-dark text-white">
+        <div class="container text-center">
+            <p>&copy; 2025 Spectrum Web Co. All rights reserved.</p>
+            <div class="d-flex justify-content-center gap-3 mt-3">
+                <a href="https://github.com/spectrumwebco/kled.io" class="text-white">GitHub</a>
+                <a href="/docs" class="text-white">Documentation</a>
+                <a href="/privacy" class="text-white">Privacy Policy</a>
+                <a href="/terms" class="text-white">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
