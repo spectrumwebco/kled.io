@@ -1,0 +1,125 @@
+name: Build and Publish CLI Tools
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+jobs:
+  build-cli:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            output_dir: linux
+            artifact_name: kled-cli-linux
+          - os: macos-latest
+            output_dir: macos
+            artifact_name: kled-cli-macos
+          - os: windows-latest
+            output_dir: windows
+            artifact_name: kled-cli-windows
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24.1'
+          
+      - name: Build CLI
+        run: |
+          mkdir -p dist/${{ matrix.output_dir }}
+          cd cli/unified
+          go build -o ../../dist/${{ matrix.output_dir }}/${{ matrix.artifact_name }}${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: dist/${{ matrix.output_dir }}/${{ matrix.artifact_name }}${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+
+  build-desktop:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            output_dir: linux
+            artifact_name: kled-desktop-linux
+          - os: macos-latest
+            output_dir: macos
+            artifact_name: kled-desktop-macos
+          - os: windows-latest
+            output_dir: windows
+            artifact_name: kled-desktop-windows
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: |
+          cd desktop
+          npm install
+          
+      - name: Build desktop app
+        run: |
+          cd desktop
+          npm run build
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: desktop/dist/${{ matrix.output_dir }}/*
+
+  publish-downloads:
+    needs: [build-cli, build-desktop]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+          
+      - name: Prepare download directory
+        run: |
+          mkdir -p web/download/files/windows/x64
+          mkdir -p web/download/files/windows/x86
+          mkdir -p web/download/files/macos/arm64
+          mkdir -p web/download/files/macos/x64
+          mkdir -p web/download/files/linux/x64
+          mkdir -p web/download/files/linux/arm64
+          mkdir -p web/download/files/linux/deb
+          mkdir -p web/download/files/linux/rpm
+          mkdir -p web/download/files/linux/apk
+          
+          # Copy CLI artifacts
+          cp artifacts/kled-cli-linux/kled-cli-linux web/download/files/linux/x64/
+          cp artifacts/kled-cli-macos/kled-cli-macos web/download/files/macos/x64/
+          cp artifacts/kled-cli-windows/kled-cli-windows.exe web/download/files/windows/x64/
+          
+          # Copy desktop artifacts
+          cp artifacts/kled-desktop-linux/* web/download/files/linux/x64/ || true
+          cp artifacts/kled-desktop-macos/* web/download/files/macos/x64/ || true
+          cp artifacts/kled-desktop-windows/* web/download/files/windows/x64/ || true
+          
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: web
+          branch: gh-pages
