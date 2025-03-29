@@ -48,21 +48,25 @@ jobs:
 
       # We're not creating symlinks or batch files anymore - just packaging the unified binary
 
-      - name: Package unified CLI binary
+      - name: Package unified CLI binary (Linux/macOS)
+        if: matrix.platform != 'windows'
         shell: bash
         run: |
           cd bin
-          if [[ "${{ matrix.platform }}" == "windows" ]]; then
-            zip -j ${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}
-          else
-            zip -j ${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}
-          fi
+          zip -j ${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}
+
+      - name: Package unified CLI binary (Windows)
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          cd bin
+          Compress-Archive -Path ${{ matrix.artifact_name }} -DestinationPath ${{ matrix.asset_name }}.zip
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.asset_name }}
-          path: bin/${{ matrix.asset_name }}.zip
+genu          path: bin/${{ matrix.asset_name }}.zip
 
   release:
     name: Create Release
@@ -71,14 +75,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
-        
+
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
