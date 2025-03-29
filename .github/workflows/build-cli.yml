@@ -66,7 +66,7 @@ jobs:
           echo "kled-windows-amd64.exe kpolicy %*" >> bin/kpolicy.bat
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.asset_name }}
           path: bin/
@@ -79,7 +79,7 @@ jobs:
     
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         
       - name: Create Release
         id: create_release
