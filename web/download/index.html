@@ -219,17 +219,64 @@
                         version = document.getElementById("linux-version").value;
                     }
                     
-                    // Generate download URL
-                    let downloadUrl = `/api/download?os=${os}&tool=${tool}&version=${version}`;
+                    // Generate download URL based on OS, tool, and version
+                    let downloadUrl = '';
+                    
+                    if (tool === 'desktop') {
+                        if (os === 'windows') {
+                            downloadUrl = `/download/files/windows/${version}/kled-desktop-windows-${version}.exe`;
+                        } else if (os === 'macos') {
+                            downloadUrl = `/download/files/macos/${version}/kled-desktop-macos-${version}.dmg`;
+                        } else if (os === 'linux') {
+                            if (version === 'deb') {
+                                downloadUrl = `/download/files/linux/deb/kled-desktop-linux.deb`;
+                            } else if (version === 'rpm') {
+                                downloadUrl = `/download/files/linux/rpm/kled-desktop-linux.rpm`;
+                            } else {
+                                downloadUrl = `/download/files/linux/${version}/kled-desktop-linux-${version}.AppImage`;
+                            }
+                        }
+                    } else if (tool === 'unified-cli') {
+                        if (os === 'windows') {
+                            downloadUrl = `/download/files/windows/${version}/kled-cli-windows-${version}.exe`;
+                        } else if (os === 'macos') {
+                            downloadUrl = `/download/files/macos/${version}/kled-cli-macos-${version}`;
+                        } else if (os === 'linux') {
+                            if (version === 'deb') {
+                                downloadUrl = `/download/files/linux/deb/kled-cli-linux.deb`;
+                            } else if (version === 'rpm') {
+                                downloadUrl = `/download/files/linux/rpm/kled-cli-linux.rpm`;
+                            } else if (version === 'apk') {
+                                downloadUrl = `/download/files/linux/apk/kled-cli-linux.apk`;
+                            } else {
+                                downloadUrl = `/download/files/linux/${version}/kled-cli-linux-${version}`;
+                            }
+                        }
+                    } else {
+                        // Individual CLI tools (kled, kcluster, kledspace, kpolicy)
+                        // Note: In production, these would redirect to the unified CLI
+                        if (os === 'windows') {
+                            downloadUrl = `/download/files/windows/${version}/kled-cli-windows-${version}.exe`;
+                        } else if (os === 'macos') {
+                            downloadUrl = `/download/files/macos/${version}/kled-cli-macos-${version}`;
+                        } else if (os === 'linux') {
+                            if (version === 'deb') {
+                                downloadUrl = `/download/files/linux/deb/kled-cli-linux.deb`;
+                            } else if (version === 'rpm') {
+                                downloadUrl = `/download/files/linux/rpm/kled-cli-linux.rpm`;
+                            } else if (version === 'apk') {
+                                downloadUrl = `/download/files/linux/apk/kled-cli-linux.apk`;
+                            } else {
+                                downloadUrl = `/download/files/linux/${version}/kled-cli-linux-${version}`;
+                            }
+                        }
+                    }
                     
                     // Show installation instructions
                     updateInstallationInstructions(os, tool, version);
                     
-                    // Simulate download (in a real app, this would actually download the file)
-                    alert(`Downloading ${tool} for ${os} (${version})...\nURL: ${downloadUrl}`);
-                    
-                    // In a real implementation, you would redirect to the download URL:
-                    // window.location.href = downloadUrl;
+                    // Redirect to the download URL
+                    window.location.href = downloadUrl;
                 });
             });
             
