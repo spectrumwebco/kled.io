@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">Kled.io Desktop/Mobile Architecture</text>
+  
+  <!-- Platform Container -->
+  <rect x="50" y="80" width="700" height="120" rx="10" ry="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <text x="400" y="105" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Platforms</text>
+  
+  <!-- Platform Components -->
+  <rect x="100" y="130" width="150" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="175" y="155" font-family="Arial" font-size="16" text-anchor="middle">Desktop</text>
+  <text x="175" y="175" font-family="Arial" font-size="12" text-anchor="middle">Windows, macOS, Linux</text>
+  
+  <rect x="325" y="130" width="150" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="400" y="155" font-family="Arial" font-size="16" text-anchor="middle">Web</text>
+  <text x="400" y="175" font-family="Arial" font-size="12" text-anchor="middle">Browser-based</text>
+  
+  <rect x="550" y="130" width="150" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="625" y="155" font-family="Arial" font-size="16" text-anchor="middle">Mobile</text>
+  <text x="625" y="175" font-family="Arial" font-size="12" text-anchor="middle">iOS, Android</text>
+  
+  <!-- Technologies Container -->
+  <rect x="50" y="220" width="700" height="120" rx="10" ry="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="400" y="245" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Technologies</text>
+  
+  <!-- Technology Components -->
+  <rect x="100" y="270" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="175" y="295" font-family="Arial" font-size="16" text-anchor="middle">Tauri v2</text>
+  <text x="175" y="315" font-family="Arial" font-size="12" text-anchor="middle">Desktop Framework</text>
+  
+  <rect x="325" y="270" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="400" y="295" font-family="Arial" font-size="16" text-anchor="middle">React</text>
+  <text x="400" y="315" font-family="Arial" font-size="12" text-anchor="middle">UI Framework</text>
+  
+  <rect x="550" y="270" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="625" y="295" font-family="Arial" font-size="16" text-anchor="middle">Lynx Family</text>
+  <text x="625" y="315" font-family="Arial" font-size="12" text-anchor="middle">Mobile Framework</text>
+  
+  <!-- Backend Container -->
+  <rect x="50" y="360" width="700" height="120" rx="10" ry="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+  <text x="400" y="385" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Backend</text>
+  
+  <!-- Backend Components -->
+  <rect x="100" y="410" width="150" height="50" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="175" y="435" font-family="Arial" font-size="16" text-anchor="middle">SpacetimeDB</text>
+  <text x="175" y="455" font-family="Arial" font-size="12" text-anchor="middle">State Management</text>
+  
+  <rect x="325" y="410" width="150" height="50" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="400" y="435" font-family="Arial" font-size="16" text-anchor="middle">Supabase</text>
+  <text x="400" y="455" font-family="Arial" font-size="12" text-anchor="middle">Auth & Storage</text>
+  
+  <rect x="550" y="410" width="150" height="50" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="625" y="435" font-family="Arial" font-size="16" text-anchor="middle">Slack Integration</text>
+  <text x="625" y="455" font-family="Arial" font-size="12" text-anchor="middle">Authentication</text>
+  
+  <!-- Integration Container -->
+  <rect x="50" y="500" width="700" height="80" rx="10" ry="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="400" y="525" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Integration</text>
+  
+  <!-- Integration Components -->
+  <rect x="100" y="540" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="160" y="560" font-family="Arial" font-size="14" text-anchor="middle">API Layer</text>
+  
+  <rect x="250" y="540" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="310" y="560" font-family="Arial" font-size="14" text-anchor="middle">CLI Integration</text>
+  
+  <rect x="400" y="540" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="460" y="560" font-family="Arial" font-size="14" text-anchor="middle">Shared State</text>
+  
+  <rect x="550" y="540" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="610" y="560" font-family="Arial" font-size="14" text-anchor="middle">Kubernetes</text>
+  
+  <!-- Relationships -->
+  <!-- Platform to Technology -->
+  <line x1="175" y1="180" x2="175" y2="270" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="180" x2="400" y2="270" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="180" x2="625" y2="270" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Cross-relationships -->
+  <path d="M175,180 C175,225 400,250 400,270" stroke="#333" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M625,180 C625,225 400,250 400,270" stroke="#333" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Technology to Backend -->
+  <line x1="175" y1="320" x2="175" y2="410" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="320" x2="400" y2="410" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="320" x2="625" y2="410" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Backend to Integration -->
+  <path d="M175,460 C175,500 160,540 160,540" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M400,460 C400,500 310,540 310,540" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M400,460 C400,500 460,540 460,540" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M625,460 C625,500 610,540 610,540" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrow Definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

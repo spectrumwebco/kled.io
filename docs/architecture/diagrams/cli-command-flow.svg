@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">Kled.io CLI Command Flow</text>
+  
+  <!-- User Input -->
+  <rect x="50" y="80" width="700" height="80" rx="10" ry="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <text x="400" y="105" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">User Input</text>
+  
+  <!-- User Input Methods -->
+  <rect x="100" y="130" width="150" height="30" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="175" y="150" font-family="Arial" font-size="14" text-anchor="middle">kled command</text>
+  
+  <rect x="325" y="130" width="150" height="30" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="400" y="150" font-family="Arial" font-size="14" text-anchor="middle">kcluster command</text>
+  
+  <rect x="550" y="130" width="150" height="30" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="625" y="150" font-family="Arial" font-size="14" text-anchor="middle">unified binary</text>
+  
+  <!-- Command Router -->
+  <rect x="50" y="200" width="700" height="100" rx="10" ry="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="400" y="225" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Command Router</text>
+  
+  <!-- Router Components -->
+  <rect x="100" y="250" width="150" height="30" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="175" y="270" font-family="Arial" font-size="14" text-anchor="middle">Executable Name Check</text>
+  
+  <rect x="325" y="250" width="150" height="30" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="400" y="270" font-family="Arial" font-size="14" text-anchor="middle">Argument Parsing</text>
+  
+  <rect x="550" y="250" width="150" height="30" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="625" y="270" font-family="Arial" font-size="14" text-anchor="middle">Command Selection</text>
+  
+  <!-- Command Implementation -->
+  <rect x="50" y="340" width="700" height="100" rx="10" ry="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+  <text x="400" y="365" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Command Implementation</text>
+  
+  <!-- Implementation Components -->
+  <rect x="100" y="390" width="150" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="175" y="410" font-family="Arial" font-size="14" text-anchor="middle">kled (kled repo)</text>
+  
+  <rect x="325" y="390" width="150" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="400" y="410" font-family="Arial" font-size="14" text-anchor="middle">kcluster (kled-pro)</text>
+  
+  <rect x="550" y="390" width="150" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="625" y="410" font-family="Arial" font-size="14" text-anchor="middle">kledspace/kpolicy</text>
+  
+  <!-- API Calls -->
+  <rect x="50" y="480" width="700" height="80" rx="10" ry="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="400" y="505" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">API Calls</text>
+  
+  <!-- API Components -->
+  <rect x="100" y="530" width="150" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="175" y="550" font-family="Arial" font-size="14" text-anchor="middle">Authentication</text>
+  
+  <rect x="325" y="530" width="150" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="400" y="550" font-family="Arial" font-size="14" text-anchor="middle">API Requests</text>
+  
+  <rect x="550" y="530" width="150" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="625" y="550" font-family="Arial" font-size="14" text-anchor="middle">Response Handling</text>
+  
+  <!-- Relationships -->
+  <!-- User Input to Router -->
+  <line x1="175" y1="160" x2="175" y2="250" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="160" x2="400" y2="250" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="160" x2="625" y2="250" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Router Flow -->
+  <line x1="250" y1="265" x2="325" y2="265" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="475" y1="265" x2="550" y2="265" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Router to Implementation -->
+  <line x1="175" y1="280" x2="175" y2="390" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="280" x2="400" y2="390" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="280" x2="625" y2="390" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Implementation to API -->
+  <line x1="175" y1="420" x2="175" y2="530" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="420" x2="400" y2="530" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="420" x2="625" y2="530" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- API Flow -->
+  <line x1="250" y1="545" x2="325" y2="545" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="475" y1="545" x2="550" y2="545" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrow Definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

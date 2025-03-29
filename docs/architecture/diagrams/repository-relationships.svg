@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">Kled.io Repository Relationships</text>
+  
+  <!-- Public Repository Container -->
+  <rect x="300" y="80" width="200" height="120" rx="10" ry="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <text x="400" y="105" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Public Repository</text>
+  
+  <!-- Kled.io Repository -->
+  <rect x="330" y="130" width="140" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="400" y="160" font-family="Arial" font-size="16" text-anchor="middle">kled.io</text>
+  
+  <!-- Private Repositories Container -->
+  <rect x="100" y="250" width="600" height="150" rx="10" ry="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="400" y="275" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Private Repositories</text>
+  
+  <!-- Kled Repository -->
+  <rect x="150" y="300" width="200" height="70" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="250" y="335" font-family="Arial" font-size="16" text-anchor="middle">kled</text>
+  <text x="250" y="355" font-family="Arial" font-size="12" text-anchor="middle">Core CLI & Desktop</text>
+  
+  <!-- Kled-Pro Repository -->
+  <rect x="450" y="300" width="200" height="70" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="550" y="335" font-family="Arial" font-size="16" text-anchor="middle">kled-pro</text>
+  <text x="550" y="355" font-family="Arial" font-size="12" text-anchor="middle">Enterprise Features</text>
+  
+  <!-- End Users -->
+  <rect x="300" y="450" width="200" height="70" rx="10" ry="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="400" y="485" font-family="Arial" font-size="16" text-anchor="middle">End Users</text>
+  <text x="400" y="505" font-family="Arial" font-size="12" text-anchor="middle">Consumers of Kled.io</text>
+  
+  <!-- Relationships -->
+  <!-- Kled to Kled.io -->
+  <path d="M250,300 C250,250 350,200 380,180" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="280" y="230" font-family="Arial" font-size="12" text-anchor="middle">CLI Implementation</text>
+  
+  <!-- Kled to Kled.io (Desktop) -->
+  <path d="M200,300 C200,230 320,210 360,180" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="220" y="210" font-family="Arial" font-size="12" text-anchor="middle">Desktop App Source</text>
+  
+  <!-- Kled-Pro to Kled.io -->
+  <path d="M550,300 C550,250 450,200 420,180" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="520" y="230" font-family="Arial" font-size="12" text-anchor="middle">kcluster Implementation</text>
+  
+  <!-- Kled-Pro to Kled -->
+  <path d="M450,335 L350,335" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="400" y="325" font-family="Arial" font-size="12" text-anchor="middle">API & Enterprise Features</text>
+  
+  <!-- Kled.io to End Users -->
+  <path d="M400,180 L400,450" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="420" y="320" font-family="Arial" font-size="12" text-anchor="middle">Distribution</text>
+  
+  <!-- Arrow Definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+  
+  <!-- Legend -->
+  <rect x="100" y="540" width="600" height="40" rx="5" ry="5" fill="#f5f5f5" stroke="#333" stroke-width="1"/>
+  <text x="400" y="565" font-family="Arial" font-size="14" text-anchor="middle">
+    <tspan x="130" dy="0" font-weight="bold">Legend:</tspan>
+    <tspan x="200" dy="0" fill="#2e7d32">■</tspan><tspan x="220" dy="0">Public Repo</tspan>
+    <tspan x="320" dy="0" fill="#1976d2">■</tspan><tspan x="340" dy="0">Private Repo</tspan>
+    <tspan x="440" dy="0" fill="#ff9800">■</tspan><tspan x="460" dy="0">End Users</tspan>
+    <tspan x="580" dy="0">→</tspan><tspan x="600" dy="0">Dependency</tspan>
+  </text>
+</svg>
