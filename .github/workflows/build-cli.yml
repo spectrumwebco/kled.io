@@ -46,31 +46,23 @@ jobs:
           mkdir -p bin
           GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -o bin/${{ matrix.artifact_name }} ./cli/unified
 
-      - name: Create symlinks for individual tools (Linux/macOS)
-        if: matrix.platform != 'windows'
-        run: |
-          ln -sf ${{ matrix.artifact_name }} bin/kled
-          ln -sf ${{ matrix.artifact_name }} bin/kcluster
-          ln -sf ${{ matrix.artifact_name }} bin/kledspace
-          ln -sf ${{ matrix.artifact_name }} bin/kpolicy
+      # We're not creating symlinks or batch files anymore - just packaging the unified binary
 
-      - name: Create batch files for Windows
-        if: matrix.platform == 'windows'
+      - name: Package unified CLI binary
+        shell: bash
         run: |
-          echo "@echo off" > bin/kled.bat
-          echo "kled-windows-amd64.exe kled %*" >> bin/kled.bat
-          echo "@echo off" > bin/kcluster.bat
-          echo "kled-windows-amd64.exe kcluster %*" >> bin/kcluster.bat
-          echo "@echo off" > bin/kledspace.bat
-          echo "kled-windows-amd64.exe kledspace %*" >> bin/kledspace.bat
-          echo "@echo off" > bin/kpolicy.bat
-          echo "kled-windows-amd64.exe kpolicy %*" >> bin/kpolicy.bat
+          cd bin
+          if [[ "${{ matrix.platform }}" == "windows" ]]; then
+            zip -j ${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}
+          else
+            zip -j ${{ matrix.asset_name }}.zip ${{ matrix.artifact_name }}
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.asset_name }}
-          path: bin/
+          path: bin/${{ matrix.asset_name }}.zip
 
   release:
     name: Create Release
@@ -92,8 +84,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            kled-linux-amd64/*
-            kled-darwin-amd64/*
-            kled-windows-amd64.exe/*
+            kled-linux-amd64/*.zip
+            kled-darwin-amd64/*.zip
+            kled-windows-amd64.exe/*.zip
           draft: false
           prerelease: false
