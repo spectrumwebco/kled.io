@@ -41,6 +41,7 @@ jobs:
           go-version: '1.21'
 
       - name: Build unified CLI binary
+        shell: bash
         run: |
           mkdir -p bin
           GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -o bin/${{ matrix.artifact_name }} ./cli/unified
