@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">Kled.io CLI Build and Distribution</text>
+  
+  <!-- Source Code -->
+  <rect x="50" y="80" width="700" height="100" rx="10" ry="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <text x="400" y="105" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Source Code</text>
+  
+  <!-- Source Components -->
+  <rect x="100" y="130" width="150" height="30" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="175" y="150" font-family="Arial" font-size="14" text-anchor="middle">kled (Private)</text>
+  
+  <rect x="325" y="130" width="150" height="30" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="400" y="150" font-family="Arial" font-size="14" text-anchor="middle">kled-pro (Private)</text>
+  
+  <rect x="550" y="130" width="150" height="30" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="625" y="150" font-family="Arial" font-size="14" text-anchor="middle">kled.io (Public)</text>
+  
+  <!-- Build Process -->
+  <rect x="50" y="220" width="700" height="120" rx="10" ry="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="400" y="245" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Build Process</text>
+  
+  <!-- Build Components -->
+  <rect x="100" y="270" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="175" y="295" font-family="Arial" font-size="14" text-anchor="middle">Makefile</text>
+  <text x="175" y="315" font-family="Arial" font-size="12" text-anchor="middle">Cross-compilation</text>
+  
+  <rect x="325" y="270" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="400" y="295" font-family="Arial" font-size="14" text-anchor="middle">GitHub Actions</text>
+  <text x="400" y="315" font-family="Arial" font-size="12" text-anchor="middle">CI/CD Pipeline</text>
+  
+  <rect x="550" y="270" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="625" y="295" font-family="Arial" font-size="14" text-anchor="middle">Unified Binary</text>
+  <text x="625" y="315" font-family="Arial" font-size="12" text-anchor="middle">Single executable</text>
+  
+  <!-- Artifacts -->
+  <rect x="50" y="380" width="700" height="100" rx="10" ry="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+  <text x="400" y="405" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Build Artifacts</text>
+  
+  <!-- Artifact Components -->
+  <rect x="100" y="430" width="150" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="175" y="450" font-family="Arial" font-size="14" text-anchor="middle">Linux Binaries</text>
+  
+  <rect x="325" y="430" width="150" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="400" y="450" font-family="Arial" font-size="14" text-anchor="middle">macOS Binaries</text>
+  
+  <rect x="550" y="430" width="150" height="30" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="625" y="450" font-family="Arial" font-size="14" text-anchor="middle">Windows Binaries</text>
+  
+  <!-- Distribution -->
+  <rect x="50" y="520" width="700" height="60" rx="10" ry="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="400" y="545" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Distribution</text>
+  
+  <!-- Distribution Components -->
+  <rect x="100" y="560" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="160" y="580" font-family="Arial" font-size="14" text-anchor="middle">Website</text>
+  
+  <rect x="250" y="560" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="310" y="580" font-family="Arial" font-size="14" text-anchor="middle">GitHub Releases</text>
+  
+  <rect x="400" y="560" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="460" y="580" font-family="Arial" font-size="14" text-anchor="middle">Install Script</text>
+  
+  <rect x="550" y="560" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="610" y="580" font-family="Arial" font-size="14" text-anchor="middle">Package Managers</text>
+  
+  <!-- Relationships -->
+  <!-- Source to Build -->
+  <line x1="175" y1="160" x2="175" y2="270" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="160" x2="400" y2="270" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="160" x2="625" y2="270" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Build Process Flow -->
+  <line x1="250" y1="295" x2="325" y2="295" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="475" y1="295" x2="550" y2="295" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Build to Artifacts -->
+  <line x1="175" y1="320" x2="175" y2="430" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="320" x2="400" y2="430" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="320" x2="625" y2="430" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Artifacts to Distribution -->
+  <path d="M175,460 C175,500 160,560 160,560" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M400,460 C400,500 310,560 310,560" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M400,460 C400,500 460,560 460,560" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M625,460 C625,500 610,560 610,560" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrow Definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

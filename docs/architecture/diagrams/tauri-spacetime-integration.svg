@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">Tauri and SpacetimeDB Integration</text>
+  
+  <!-- Tauri Container -->
+  <rect x="50" y="80" width="700" height="200" rx="10" ry="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <text x="400" y="105" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Tauri v2 Application</text>
+  
+  <!-- Tauri Components -->
+  <rect x="100" y="130" width="150" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="175" y="155" font-family="Arial" font-size="16" text-anchor="middle">Tauri Core</text>
+  <text x="175" y="175" font-family="Arial" font-size="12" text-anchor="middle">Rust</text>
+  
+  <rect x="100" y="200" width="150" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="175" y="225" font-family="Arial" font-size="16" text-anchor="middle">IPC Bridge</text>
+  <text x="175" y="245" font-family="Arial" font-size="12" text-anchor="middle">Rust/JavaScript</text>
+  
+  <rect x="325" y="130" width="150" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="400" y="155" font-family="Arial" font-size="16" text-anchor="middle">WebView</text>
+  <text x="400" y="175" font-family="Arial" font-size="12" text-anchor="middle">Platform-specific</text>
+  
+  <rect x="325" y="200" width="150" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="400" y="225" font-family="Arial" font-size="16" text-anchor="middle">React App</text>
+  <text x="400" y="245" font-family="Arial" font-size="12" text-anchor="middle">JavaScript/TypeScript</text>
+  
+  <rect x="550" y="130" width="150" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="625" y="155" font-family="Arial" font-size="16" text-anchor="middle">Plugins</text>
+  <text x="625" y="175" font-family="Arial" font-size="12" text-anchor="middle">Rust</text>
+  
+  <rect x="550" y="200" width="150" height="50" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="625" y="225" font-family="Arial" font-size="16" text-anchor="middle">Native Modules</text>
+  <text x="625" y="245" font-family="Arial" font-size="12" text-anchor="middle">Rust</text>
+  
+  <!-- SpacetimeDB Container -->
+  <rect x="50" y="300" width="700" height="200" rx="10" ry="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="400" y="325" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">SpacetimeDB Integration</text>
+  
+  <!-- SpacetimeDB Components -->
+  <rect x="100" y="350" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="175" y="375" font-family="Arial" font-size="16" text-anchor="middle">SpacetimeDB Server</text>
+  <text x="175" y="395" font-family="Arial" font-size="12" text-anchor="middle">Rust</text>
+  
+  <rect x="100" y="420" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="175" y="445" font-family="Arial" font-size="16" text-anchor="middle">Database Models</text>
+  <text x="175" y="465" font-family="Arial" font-size="12" text-anchor="middle">Rust</text>
+  
+  <rect x="325" y="350" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="400" y="375" font-family="Arial" font-size="16" text-anchor="middle">SpacetimeDB Client</text>
+  <text x="400" y="395" font-family="Arial" font-size="12" text-anchor="middle">TypeScript</text>
+  
+  <rect x="325" y="420" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="400" y="445" font-family="Arial" font-size="16" text-anchor="middle">State Hooks</text>
+  <text x="400" y="465" font-family="Arial" font-size="12" text-anchor="middle">TypeScript</text>
+  
+  <rect x="550" y="350" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="625" y="375" font-family="Arial" font-size="16" text-anchor="middle">API Integration</text>
+  <text x="625" y="395" font-family="Arial" font-size="12" text-anchor="middle">Rust/TypeScript</text>
+  
+  <rect x="550" y="420" width="150" height="50" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="625" y="445" font-family="Arial" font-size="16" text-anchor="middle">Authentication</text>
+  <text x="625" y="465" font-family="Arial" font-size="12" text-anchor="middle">Supabase/Slack</text>
+  
+  <!-- Integration Container -->
+  <rect x="50" y="520" width="700" height="60" rx="10" ry="10" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="400" y="545" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Cross-Platform Integration</text>
+  
+  <!-- Integration Components -->
+  <rect x="100" y="560" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="160" y="580" font-family="Arial" font-size="14" text-anchor="middle">Desktop</text>
+  
+  <rect x="250" y="560" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="310" y="580" font-family="Arial" font-size="14" text-anchor="middle">Mobile</text>
+  
+  <rect x="400" y="560" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="460" y="580" font-family="Arial" font-size="14" text-anchor="middle">Web</text>
+  
+  <rect x="550" y="560" width="120" height="30" rx="5" ry="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="1"/>
+  <text x="610" y="580" font-family="Arial" font-size="14" text-anchor="middle">CLI</text>
+  
+  <!-- Relationships -->
+  <!-- Tauri Components -->
+  <line x1="250" y1="155" x2="325" y2="155" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="475" y1="155" x2="550" y2="155" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="250" y1="225" x2="325" y2="225" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="475" y1="225" x2="550" y2="225" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <line x1="175" y1="180" x2="175" y2="200" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="180" x2="400" y2="200" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="180" x2="625" y2="200" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Tauri to SpacetimeDB -->
+  <line x1="175" y1="250" x2="175" y2="350" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="250" x2="400" y2="350" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="250" x2="625" y2="350" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- SpacetimeDB Components -->
+  <line x1="250" y1="375" x2="325" y2="375" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="475" y1="375" x2="550" y2="375" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="250" y1="445" x2="325" y2="445" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="475" y1="445" x2="550" y2="445" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <line x1="175" y1="400" x2="175" y2="420" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="400" x2="400" y2="420" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="625" y1="400" x2="625" y2="420" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- SpacetimeDB to Integration -->
+  <path d="M175,470 C175,500 160,560 160,560" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M400,470 C400,500 310,560 310,560" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M400,470 C400,500 460,560 460,560" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M625,470 C625,500 610,560 610,560" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrow Definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

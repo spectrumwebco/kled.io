@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">Kled.io Database Integration Architecture</text>
+  
+  <!-- Primary Database Container -->
+  <rect x="50" y="80" width="700" height="160" rx="10" ry="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <text x="400" y="105" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Primary Database Systems</text>
+  
+  <!-- Primary Database Components -->
+  <rect x="100" y="130" width="180" height="80" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="190" y="155" font-family="Arial" font-size="16" text-anchor="middle">SpacetimeDB</text>
+  <text x="190" y="175" font-family="Arial" font-size="12" text-anchor="middle">Application State</text>
+  <text x="190" y="195" font-family="Arial" font-size="12" text-anchor="middle">Real-time Synchronization</text>
+  
+  <rect x="310" y="130" width="180" height="80" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="400" y="155" font-family="Arial" font-size="16" text-anchor="middle">Supabase</text>
+  <text x="400" y="175" font-family="Arial" font-size="12" text-anchor="middle">Authentication</text>
+  <text x="400" y="195" font-family="Arial" font-size="12" text-anchor="middle">API Key Management</text>
+  
+  <rect x="520" y="130" width="180" height="80" rx="5" ry="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="610" y="155" font-family="Arial" font-size="16" text-anchor="middle">Slack Integration</text>
+  <text x="610" y="175" font-family="Arial" font-size="12" text-anchor="middle">User Authentication</text>
+  <text x="610" y="195" font-family="Arial" font-size="12" text-anchor="middle">Customer Management</text>
+  
+  <!-- Future Integrations Container -->
+  <rect x="50" y="260" width="700" height="160" rx="10" ry="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <text x="400" y="285" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Future Database Integrations</text>
+  
+  <!-- Future Integration Components -->
+  <rect x="100" y="310" width="180" height="80" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="190" y="335" font-family="Arial" font-size="16" text-anchor="middle">Datastax Enterprise</text>
+  <text x="190" y="355" font-family="Arial" font-size="12" text-anchor="middle">Apache Cassandra</text>
+  <text x="190" y="375" font-family="Arial" font-size="12" text-anchor="middle">Distributed Data Storage</text>
+  
+  <rect x="310" y="310" width="180" height="80" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="400" y="335" font-family="Arial" font-size="16" text-anchor="middle">Redis</text>
+  <text x="400" y="355" font-family="Arial" font-size="12" text-anchor="middle">Caching</text>
+  <text x="400" y="375" font-family="Arial" font-size="12" text-anchor="middle">Real-time Data Processing</text>
+  
+  <rect x="520" y="310" width="180" height="80" rx="5" ry="5" fill="#bbdefb" stroke="#1976d2" stroke-width="1"/>
+  <text x="610" y="335" font-family="Arial" font-size="16" text-anchor="middle">Tigris</text>
+  <text x="610" y="355" font-family="Arial" font-size="12" text-anchor="middle">Search Functionality</text>
+  <text x="610" y="375" font-family="Arial" font-size="12" text-anchor="middle">Data Indexing</text>
+  
+  <!-- High Availability Container -->
+  <rect x="50" y="440" width="700" height="140" rx="10" ry="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+  <text x="400" y="465" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">High Availability Configuration</text>
+  
+  <!-- HA Components -->
+  <rect x="100" y="490" width="120" height="70" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="160" y="515" font-family="Arial" font-size="14" text-anchor="middle">Primary Nodes</text>
+  <text x="160" y="535" font-family="Arial" font-size="12" text-anchor="middle">Write Operations</text>
+  
+  <rect x="250" y="490" width="120" height="70" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="310" y="515" font-family="Arial" font-size="14" text-anchor="middle">Read Replicas</text>
+  <text x="310" y="535" font-family="Arial" font-size="12" text-anchor="middle">Read Operations</text>
+  
+  <rect x="400" y="490" width="120" height="70" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="460" y="515" font-family="Arial" font-size="14" text-anchor="middle">Failover</text>
+  <text x="460" y="535" font-family="Arial" font-size="12" text-anchor="middle">Automatic Recovery</text>
+  
+  <rect x="550" y="490" width="120" height="70" rx="5" ry="5" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="610" y="515" font-family="Arial" font-size="14" text-anchor="middle">Backups</text>
+  <text x="610" y="535" font-family="Arial" font-size="12" text-anchor="middle">Disaster Recovery</text>
+  
+  <!-- Relationships -->
+  <!-- Primary DB Relationships -->
+  <line x1="280" y1="170" x2="310" y2="170" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="490" y1="170" x2="520" y2="170" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Primary to Future -->
+  <line x1="190" y1="210" x2="190" y2="310" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="210" x2="400" y2="310" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="610" y1="210" x2="610" y2="310" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Future DB Relationships -->
+  <line x1="280" y1="350" x2="310" y2="350" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="490" y1="350" x2="520" y2="350" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Future to HA -->
+  <path d="M190,390 C190,420 160,490 160,490" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M400,390 C400,420 310,490 310,490" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M400,390 C400,420 460,490 460,490" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M610,390 C610,420 610,490 610,490" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- HA Relationships -->
+  <line x1="220" y1="525" x2="250" y2="525" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="370" y1="525" x2="400" y2="525" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <line x1="520" y1="525" x2="550" y2="525" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrow Definitions -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+</svg>
