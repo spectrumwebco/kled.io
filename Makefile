@@ -1,6 +1,6 @@
 # Kled.io Makefile for building all components
 
-.PHONY: all build cli desktop mobile web install clean
+.PHONY: all build cli desktop mobile web install clean prepare-downloads
 
 # Default target
 all: build
@@ -65,6 +65,30 @@ install:
 	@ln -sf $(HOME)/.kled/bin/kled-unified $(HOME)/.kled/bin/kpolicy
 	@echo "export PATH=\$$PATH:\$$HOME/.kled/bin" >> $(HOME)/.bashrc
 	@echo "Installation complete! Please restart your shell or run 'source ~/.bashrc'"
+
+# Prepare downloads directory for GitHub Actions
+prepare-downloads:
+	@echo "Preparing downloads directory..."
+	@mkdir -p web/download/files/windows/x64
+	@mkdir -p web/download/files/windows/x86
+	@mkdir -p web/download/files/macos/arm64
+	@mkdir -p web/download/files/macos/x64
+	@mkdir -p web/download/files/linux/x64
+	@mkdir -p web/download/files/linux/arm64
+	
+	# Copy CLI artifacts
+	@cp artifacts/kled-cli-linux-amd64/* web/download/files/linux/x64/ || true
+	@cp artifacts/kled-cli-linux-arm64/* web/download/files/linux/arm64/ || true
+	@cp artifacts/kled-cli-macos-amd64/* web/download/files/macos/x64/ || true
+	@cp artifacts/kled-cli-macos-arm64/* web/download/files/macos/arm64/ || true
+	@cp artifacts/kled-cli-windows/* web/download/files/windows/x64/ || true
+	
+	# Copy desktop artifacts
+	@cp artifacts/kled-desktop-linux/* web/download/files/linux/x64/ || true
+	@cp artifacts/kled-desktop-macos/* web/download/files/macos/x64/ || true
+	@cp artifacts/kled-desktop-windows/* web/download/files/windows/x64/ || true
+	
+	@echo "Download directory prepared!"
 
 # Clean build artifacts
 clean:
