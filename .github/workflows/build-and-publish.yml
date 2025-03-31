@@ -81,7 +81,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
           cache: 'yarn'
           cache-dependency-path: './desktop/yarn.lock'
 
@@ -102,12 +102,12 @@ jobs:
       - name: Build Frontend
         run: |
           cd desktop
-          yarn build
+          yarn build || yarn rsbuild build
 
       - name: Build Tauri App
         run: |
           cd desktop
-          yarn tauri build
+          yarn tauri build || yarn tauri:build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -141,21 +141,19 @@ jobs:
           # Use the Makefile to prepare the download directory structure
           make prepare-downloads
 
+      - name: List artifacts
+        run: |
+          find artifacts -type f -name "*" | sort
+
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            artifacts/kled-cli-linux-amd64/*
-            artifacts/kled-cli-linux-arm64/*
-            artifacts/kled-cli-macos-amd64/*
-            artifacts/kled-cli-macos-arm64/*
-            artifacts/kled-cli-windows/*
-            artifacts/kled-desktop-linux/*
-            artifacts/kled-desktop-macos/*
-            artifacts/kled-desktop-windows/*
+            artifacts/**/*
           draft: false
           prerelease: false
+          generate_release_notes: true
           
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4

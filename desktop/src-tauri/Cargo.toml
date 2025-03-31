@@ -1,37 +1,98 @@
 [package]
 name = "kled-beta"
-version = "0.1.0"
+version = "0.0.5"
 description = "Kled Desktop Application"
 authors = ["Spectrum Web Co"]
-license = "MIT"
-repository = "https://github.com/spectrumwebco/kled.io"
+license = ""
+repository = ""
 edition = "2021"
 
 [build-dependencies]
 tauri-build = { version = "2.0.0", features = [] }
 
 [dependencies]
-tauri = { version = "2.0.0", features = ["macos-private-api", "tray-icon"] }
+# SpacetimeDB
+spacetimedb-sdk = "0.8.2"
+hex = "0.4"
+
+# Tauri
+tauri = { version = "2.0.4", features = ["macos-private-api", "tray-icon"] }
+# Serde
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tokio = { version = "1.32", features = ["full"] }
-anyhow = "1.0"
-log = "0.4"
-env_logger = "0.10"
+serde_qs = "0.12.0"
+serde_yaml = "0.9.21"
+serde_urlencoded = "0.7.1"
+# SpacetimeDB
+kled-spacetime-server = { path = "../server" }
 
 # Tauri plugins
-tauri-plugin-dialog = { version = "2.0.0-beta" }
-tauri-plugin-shell = { version = "2.0.0-beta" }
-tauri-plugin-fs = { version = "2.0.0-beta" }
-tauri-plugin-updater = { version = "2.0.0-beta" }
+tauri-plugin-deep-link = { version = "2.0.0" }
+tauri-plugin-store = { version = "2.2.0" }
+tauri-plugin-dialog = { version = "2.2.0" }
+tauri-plugin-shell = { version = "2.2.0" }
+tauri-plugin-clipboard-manager = { version = "2.2.2" }
+tauri-plugin-fs = { version = "2.2.0" }
+tauri-plugin-os = { version = "2.2.1" }
+tauri-plugin-process = { version = "2.2.0" }
+tauri-plugin-updater = { version = "2.6.1" }
+tauri-plugin-notification = { version = "2.2.2" }
+tauri-plugin-single-instance = { version = "2.2.2" }
+
+# Logging
+log = { version = "0.4" }
+tauri-plugin-log = { version = "2" }
+# Datetime
+chrono = { version = "0.4.23", features = ["serde"] }
+
+tokio = { version = "1.26.0", features = [
+        "time",
+        "parking_lot",
+        "sync",
+        "net",
+] }
+thiserror = "1.0.38"
+regex = "1.7.1"
+lazy_static = "1.4.0"
+url = "2.3.1"
+anyhow = "1.0.70"
+dirs = "5.0.1"
+reqwest = { version = "0.12.12", features = ["json"] }
+uuid = { version = "1.4.1", features = ["v4", "serde"] }
+dispatch = "0.2.0"
+ts-rs = { version = "6.2.1", features = ["serde-compat", "chrono-impl"] }
+semver = "1.0.18"
+strip-ansi-escapes = "0.1.1"
+axum = { version = "0.7.1", features = ["ws"] }
+tower-http = { version = "0.5.1", features = ["cors"] }
+http = "1.0.0"
+nix = { version = "0.29.0", features = ["signal"] }
+interprocess = "1.2.1"
+hyper = { version = "1.6.0", features = ["client", "http1"] }
+pin-project-lite = "0.2.16"
+bytes = "1.10.0"
+http-body-util = "0.1.2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+winreg = "0.50.0"
+windows = { version = "0.48", features = [
+        "Win32_Foundation",
+        "Win32_UI_WindowsAndMessaging",
+        "Win32_System",
+        "Win32_System_Diagnostics",
+        "Win32_System_Diagnostics_ToolHelp",
+        "Win32_System_Threading",
+] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+window-vibrancy = "0.5.2"
+cocoa = "0.24"
+objc = "0.2"
 
 [features]
+# by default Tauri runs in production mode
+# when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
 default = ["custom-protocol"]
+# this feature is used used for production builds where `devPath` points to the filesystem
+# DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
-
-[profile.release]
-panic = "abort"
-codegen-units = 1
-lto = true
-opt-level = "s"
-strip = true
