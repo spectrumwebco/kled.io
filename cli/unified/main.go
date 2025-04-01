@@ -1,122 +1,179 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
-	"path/filepath"
-	"strings"
+
+	"github.com/spf13/cobra"
 )
 
-type Config struct {
-	APIKey     string `json:"apiKey"`
-	APIBaseURL string `json:"apiBaseURL"`
-}
-
-var config Config
-
-func init() {
-	configPath := getConfigPath()
-	if _, err := os.Stat(configPath); err == nil {
-		data, err := os.ReadFile(configPath)
-		if err == nil {
-			_ = json.Unmarshal(data, &config)
-		}
-	}
-
-	if apiKey := os.Getenv("KLED_API_KEY"); apiKey != "" {
-		config.APIKey = apiKey
-	}
-	if apiBaseURL := os.Getenv("KLED_API_BASE_URL"); apiBaseURL != "" {
-		config.APIBaseURL = apiBaseURL
-	}
-}
-
 func main() {
-	execName := filepath.Base(os.Args[0])
-	execName = strings.TrimSuffix(execName, filepath.Ext(execName))
-
-	var command string
-	if strings.HasPrefix(execName, "kled-") {
-		if len(os.Args) < 2 {
-			printUsage()
-			os.Exit(1)
-		}
-		command = os.Args[1]
-		os.Args = append(os.Args[:1], os.Args[2:]...)
-	} else {
-		switch execName {
-		case "kled":
-			command = "kled"
-		case "kcluster":
-			command = "kcluster"
-		case "kledspace":
-			command = "kledspace"
-		case "kpolicy":
-			command = "kpolicy"
-		default:
-			fmt.Printf("Unknown command: %s\n", execName)
-			printUsage()
-			os.Exit(1)
-		}
+	rootCmd := &cobra.Command{
+		Use:   "kled",
+		Short: "Kled - Kubernetes development and management platform",
+		Long: `Kled is a comprehensive platform for Kubernetes development and management.
+It combines multiple tools into a single unified CLI:
+- kled cluster: Kubernetes cluster management
+- kled space: Kubernetes workspace management
+- kled policy: Kubernetes policy management
+- kled pro: Pro features and enterprise functionality`,
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
 	}
 
-	switch command {
-	case "kled":
-		executeKled()
-	case "kcluster":
-		executeKCluster()
-	case "kledspace":
-		executeKledSpace()
-	case "kpolicy":
-		executeKPolicy()
-	default:
-		fmt.Printf("Unknown command: %s\n", command)
-		printUsage()
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "version",
+		Short: "Print the version of Kled",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("Kled v0.1.0")
+		},
+	})
+
+	spaceCmd := &cobra.Command{
+		Use:   "space",
+		Short: "Kubernetes workspace management",
+		Long:  "KledSpace provides tools for managing Kubernetes workspaces and development environments",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+
+	spaceCmd.AddCommand(
+		&cobra.Command{
+			Use:   "init",
+			Short: "Initialize a new project",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Initializing KledSpace project...")
+			},
+		},
+		&cobra.Command{
+			Use:   "dev",
+			Short: "Start development mode",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Starting KledSpace development mode...")
+			},
+		},
+		&cobra.Command{
+			Use:   "deploy",
+			Short: "Deploy resources",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Deploying resources with KledSpace...")
+			},
+		},
+	)
+
+	clusterCmd := &cobra.Command{
+		Use:   "cluster",
+		Short: "Kubernetes cluster management",
+		Long:  "KCluster provides tools for creating and managing Kubernetes clusters",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+
+	clusterCmd.AddCommand(
+		&cobra.Command{
+			Use:   "create",
+			Short: "Create a new cluster",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Creating KCluster cluster...")
+			},
+		},
+		&cobra.Command{
+			Use:   "connect",
+			Short: "Connect to a cluster",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Connecting to KCluster cluster...")
+			},
+		},
+		&cobra.Command{
+			Use:   "delete",
+			Short: "Delete a cluster",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Deleting KCluster cluster...")
+			},
+		},
+	)
+
+	policyCmd := &cobra.Command{
+		Use:   "policy",
+		Short: "Kubernetes policy management",
+		Long:  "KPolicy provides tools for managing Kubernetes policies",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+
+	policyCmd.AddCommand(
+		&cobra.Command{
+			Use:   "apply",
+			Short: "Apply a policy",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Applying KPolicy policy...")
+			},
+		},
+		&cobra.Command{
+			Use:   "list",
+			Short: "List policies",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Listing KPolicy policies...")
+			},
+		},
+		&cobra.Command{
+			Use:   "validate",
+			Short: "Validate a policy",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Validating KPolicy policy...")
+			},
+		},
+	)
+
+	proCmd := &cobra.Command{
+		Use:   "pro",
+		Short: "Pro features",
+		Long:  "Access to Kled Pro features and enterprise functionality",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+
+	proCmd.AddCommand(
+		&cobra.Command{
+			Use:   "login",
+			Short: "Login to Kled Pro",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Logging in to Kled Pro...")
+			},
+		},
+		&cobra.Command{
+			Use:   "status",
+			Short: "Show subscription status",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Showing Kled Pro subscription status...")
+			},
+		},
+	)
+
+	rootCmd.AddCommand(spaceCmd, clusterCmd, policyCmd, proCmd)
+
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
-}
-
-func printUsage() {
-	fmt.Println("Kled.io CLI - Kubernetes Workspace Management")
-	fmt.Println("\nUsage:")
-	fmt.Println("  kled <command> [args]")
-	fmt.Println("  kcluster <command> [args]")
-	fmt.Println("  kledspace <command> [args]")
-	fmt.Println("  kpolicy <command> [args]")
-	fmt.Println("\nOr with unified binary:")
-	fmt.Println("  kled-<platform> kled <command> [args]")
-	fmt.Println("  kled-<platform> kcluster <command> [args]")
-	fmt.Println("  kled-<platform> kledspace <command> [args]")
-	fmt.Println("  kled-<platform> kpolicy <command> [args]")
-	fmt.Println("\nCommands:")
-	fmt.Println("  kled         Manage Kled workspaces")
-	fmt.Println("  kcluster     Manage Kubernetes clusters")
-	fmt.Println("  kledspace    Manage workspace environments")
-	fmt.Println("  kpolicy      Manage policies")
-	fmt.Println("\nRun 'kled help' for more information on a command.")
-}
-
-func executeKled() {
-	fmt.Println("Executing kled command...")
-}
-
-func executeKCluster() {
-	fmt.Println("Executing kcluster command...")
-}
-
-func executeKledSpace() {
-	fmt.Println("Executing kledspace command...")
-}
-
-func executeKPolicy() {
-	fmt.Println("Executing kpolicy command...")
-}
-
-func getConfigPath() string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return ""
-	}
-	return filepath.Join(home, ".kled", "config.json")
 }
