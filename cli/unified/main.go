@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func DetectCommandName() string {
+func detectCommandName() string {
 	execPath := os.Args[0]
 	execName := filepath.Base(execPath)
 	
@@ -29,11 +29,38 @@ func DetectCommandName() string {
 	return "kled"
 }
 
-func main() {
-	commandName := DetectCommandName()
+func getCommandFromArgs(args []string) string {
+	if len(args) == 0 {
+		return ""
+	}
 	
-	apiKey := ""
-	apiBaseURL := ""
+	knownCommands := map[string]bool{
+		"cluster": true,
+		"space":   true,
+		"policy":  true,
+		"pro":     true,
+		"version": true,
+	}
+	
+	if knownCommands[args[0]] {
+		return args[0]
+	}
+	
+	return ""
+}
+
+func main() {
+	commandName := detectCommandName()
+	
+	apiKey := os.Getenv("KLED_API_KEY")
+	if apiKey == "" {
+		apiKey = os.Getenv("KLED_TOKEN")
+	}
+	
+	apiBaseURL := os.Getenv("KLED_API_URL")
+	if apiBaseURL == "" {
+		apiBaseURL = "https://api.kled.io"
+	}
 	
 	var rootCmd *cobra.Command
 	
