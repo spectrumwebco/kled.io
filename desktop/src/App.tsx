@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { ChakraProvider, Box, Flex, Heading, Text, Button, VStack, HStack, useToast } from '@chakra-ui/react';
+import { ChakraProvider, Box, Flex, Heading, Text, Button, VStack, HStack, useToast, Divider } from '@chakra-ui/react';
 import { invoke } from '@tauri-apps/api/tauri';
 import CLIInterfaceNav from './components/CLIInterfaceNav';
+import UnifiedCommandPanel from './components/UnifiedCommandPanel';
+import KledProWebAppEmbed from './components/KledProWebAppEmbed';
 
 function App() {
   const [workspaces, setWorkspaces] = useState<string[]>([]);
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
   const [currentCLIType, setCurrentCLIType] = useState<'kled' | 'kcluster' | 'kledspace' | 'kpolicy'>('kled');
+  const [showKledProApp, setShowKledProApp] = useState<boolean>(false);
   const toast = useToast();
 
   useEffect(() => {
     loadWorkspaces();
   }, []);
+  
+  useEffect(() => {
+    setShowKledProApp(currentCLIType === 'kcluster');
+  }, [currentCLIType]);
 
   const loadWorkspaces = async () => {
     try {
@@ -79,6 +86,11 @@ function App() {
         {/* CLI Interface Navigation */}
         <CLIInterfaceNav onInterfaceChange={handleCLIInterfaceChange} />
         
+        {/* Unified Command Panel - Shows for all CLI types */}
+        <UnifiedCommandPanel currentCLIType={currentCLIType} />
+        
+        <Divider my={6} />
+        
         {/* Conditional rendering based on selected CLI interface */}
         {currentCLIType === 'kled' && (
           <Flex direction={{ base: 'column', md: 'row' }} gap={8}>
@@ -132,9 +144,7 @@ function App() {
           <Box>
             <Heading size="md" mb={4}>Kubernetes Cluster Management</Heading>
             <Text mb={4}>Interface for managing Kubernetes clusters using kcluster commands</Text>
-            {/* Import KledProWebAppEmbed component when TypeScript dependencies are resolved */}
-            {/* <KledProWebAppEmbed isVisible={true} /> */}
-            <Box p={4} borderWidth={1} borderRadius="md">
+            <Box p={4} borderWidth={1} borderRadius="md" mb={6}>
               <Heading size="sm" mb={2}>kCluster Features</Heading>
               <Text>• Create and manage Kubernetes clusters</Text>
               <Text>• Connect to existing clusters</Text>
@@ -144,19 +154,34 @@ function App() {
           </Box>
         )}
         
+        {/* KledPro Web App Embed - Only shown for kcluster interface */}
+        <KledProWebAppEmbed isVisible={showKledProApp} />
+        
         {currentCLIType === 'kledspace' && (
-          <Box>
-            <Heading size="md" mb={4}>Kled Space Management</Heading>
-            <Text>Interface for managing application spaces using kledspace commands</Text>
-            {/* Add space management UI components here */}
+          <Box mt={4}>
+            <Heading size="md" mb={4}>Application Space Management</Heading>
+            <Text mb={4}>Interface for managing application spaces using kledspace commands</Text>
+            <Box p={4} borderWidth={1} borderRadius="md">
+              <Heading size="sm" mb={2}>kledspace Features</Heading>
+              <Text>• Initialize application spaces with templates</Text>
+              <Text>• Deploy applications to Kubernetes clusters</Text>
+              <Text>• Manage application lifecycle and scaling</Text>
+              <Text>• Configure application networking and storage</Text>
+            </Box>
           </Box>
         )}
         
         {currentCLIType === 'kpolicy' && (
-          <Box>
+          <Box mt={4}>
             <Heading size="md" mb={4}>Kubernetes Policy Management</Heading>
-            <Text>Interface for managing Kubernetes policies using kpolicy commands</Text>
-            {/* Add policy management UI components here */}
+            <Text mb={4}>Interface for managing Kubernetes policies using kpolicy commands</Text>
+            <Box p={4} borderWidth={1} borderRadius="md">
+              <Heading size="sm" mb={2}>kpolicy Features</Heading>
+              <Text>• Define policies using TypeScript</Text>
+              <Text>• Validate policies against clusters</Text>
+              <Text>• Apply policies to enforce security standards</Text>
+              <Text>• Monitor policy compliance across clusters</Text>
+            </Box>
           </Box>
         )}
       </Box>
