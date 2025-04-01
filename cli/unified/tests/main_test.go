@@ -11,25 +11,25 @@ func TestDetectCommandName(t *testing.T) {
 	defer func() { os.Args = originalArgs }()
 	
 	os.Args = []string{"/usr/local/bin/kled", "arg1", "arg2"}
-	cmdName := detectCommandName()
+	cmdName := DetectCommandName()
 	if cmdName != "kled" {
 		t.Errorf("Expected command name 'kled', got '%s'", cmdName)
 	}
 	
 	os.Args = []string{"/usr/local/bin/kcluster", "arg1", "arg2"}
-	cmdName = detectCommandName()
+	cmdName = DetectCommandName()
 	if cmdName != "kcluster" {
 		t.Errorf("Expected command name 'kcluster', got '%s'", cmdName)
 	}
 	
 	os.Args = []string{"/usr/local/bin/kledspace", "arg1", "arg2"}
-	cmdName = detectCommandName()
+	cmdName = DetectCommandName()
 	if cmdName != "kledspace" {
 		t.Errorf("Expected command name 'kledspace', got '%s'", cmdName)
 	}
 	
 	os.Args = []string{"/usr/local/bin/kpolicy", "arg1", "arg2"}
-	cmdName = detectCommandName()
+	cmdName = DetectCommandName()
 	if cmdName != "kpolicy" {
 		t.Errorf("Expected command name 'kpolicy', got '%s'", cmdName)
 	}
@@ -62,7 +62,7 @@ func TestDetectCommandName(t *testing.T) {
 		symlinkPath := filepath.Join(tempDir, cmdName)
 		os.Args = []string{symlinkPath, "arg1", "arg2"}
 		
-		detectedCmd := detectCommandName()
+		detectedCmd := DetectCommandName()
 		if detectedCmd != cmdName {
 			t.Errorf("Expected command name '%s', got '%s'", cmdName, detectedCmd)
 		}
@@ -71,19 +71,19 @@ func TestDetectCommandName(t *testing.T) {
 
 func TestGetCommandFromArgs(t *testing.T) {
 	args := []string{"kled", "--flag", "value"}
-	cmdName := getCommandFromArgs(args)
+	cmdName := GetCommandFromArgs(args)
 	if cmdName != "" {
 		t.Errorf("Expected empty command name, got '%s'", cmdName)
 	}
 	
 	args = []string{"kled-unified", "kcluster", "create", "--name", "test"}
-	cmdName = getCommandFromArgs(args)
+	cmdName = GetCommandFromArgs(args)
 	if cmdName != "kcluster" {
 		t.Errorf("Expected command name 'kcluster', got '%s'", cmdName)
 	}
 	
 	args = []string{"kled-unified", "--flag", "value", "kledspace", "init"}
-	cmdName = getCommandFromArgs(args)
+	cmdName = GetCommandFromArgs(args)
 	if cmdName != "kledspace" {
 		t.Errorf("Expected command name 'kledspace', got '%s'", cmdName)
 	}
