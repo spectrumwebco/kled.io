@@ -1,17 +1,51 @@
-import {
-  Child,
-  ChildProcess,
-  EventEmitter,
-  Command as ShellCommand,
-} from "@tauri-apps/plugin-shell"
+interface EventEmitter<T extends string = string> {
+  addListener(event: T, callback: (data: string) => void): void;
+  removeListener(event: T, callback: (data: string) => void): void;
+}
+
+interface Child {
+  kill(): Promise<void>;
+  pid?: number;
+}
+
+interface ChildProcess<T> {
+  stdout: EventEmitter<"data">;
+  stderr: EventEmitter<"data">;
+  on(event: string, callback: (arg: any) => void): void;
+  code?: number;
+}
+
+interface ShellCommand<T> {
+  stdout: EventEmitter<"data">;
+  stderr: EventEmitter<"data">;
+  on(event: string, callback: (arg: any) => void): void;
+  spawn(): Promise<Child>;
+  execute(): Promise<ChildProcess<T>>;
+  sidecar(binary: string, args: string[], options?: any): ShellCommand<T>;
+  create(command: string, args: string[], options?: any): ShellCommand<T>;
+}
+
+const ShellCommand = {
+  sidecar: (binary: string, args: string[], options?: any): ShellCommand<string> => ({} as any),
+  create: (command: string, args: string[], options?: any): ShellCommand<string> => ({} as any)
+}
 import { debug, ErrorTypeCancelled, isError, Result, ResultError, Return, sleep } from "../lib"
-import { DEVPOD_BINARY, DEVPOD_FLAG_OPTION, DEVPOD_UI_ENV_VAR } from "./constants"
+import { 
+  KLED_BINARY, 
+  KCLUSTER_BINARY, 
+  KLEDSPACE_BINARY, 
+  KPOLICY_BINARY, 
+  FLAG_OPTION, 
+  KLED_UI_ENV_VAR,
+  API_KEY_ENV_VAR,
+  API_BASE_URL_ENV_VAR
+} from "./constants"
 import { TStreamEvent } from "./types"
 import { TAURI_SERVER_URL } from "./tauriClient"
 
 export type TStreamEventListenerFn = (event: TStreamEvent) => void
 export type TEventListener<TEventName extends string> = Parameters<
-  EventEmitter<Record<TEventName, string>>["addListener"]
+  EventEmitter<TEventName>["addListener"]
 >[1]
 type TStreamOptions = Readonly<{
   ignoreStdoutError?: boolean
@@ -33,14 +67,16 @@ export class Command implements TCommand<ChildProcess<string>> {
   private childProcess?: Child
   private args: string[]
   private cancelled = false
+  private cliType: 'kled' | 'kcluster' | 'kledspace' | 'kpolicy'
 
   public static ADDITIONAL_ENV_VARS: string = ""
   public static HTTP_PROXY: string = ""
   public static HTTPS_PROXY: string = ""
   public static NO_PROXY: string = ""
 
-  constructor(args: string[]) {
-    debug("commands", "Creating Devpod command with args: ", args)
+  constructor(args: string[], cliType: 'kled' | 'kcluster' | 'kledspace' | 'kpolicy' = 'kled') {
+    debug("commands", `Creating ${cliType} command with args:`, args)
+    this.cliType = cliType
     const extraEnvVars = Command.ADDITIONAL_ENV_VARS.split(",")
       .map((envVarStr) => envVarStr.split("="))
       .reduce(
@@ -67,14 +103,46 @@ export class Command implements TCommand<ChildProcess<string>> {
     }
 
     // allows the CLI to detect if commands have been invoked from the UI
-    extraEnvVars[DEVPOD_UI_ENV_VAR] = "true"
+    extraEnvVars[KLED_UI_ENV_VAR] = "true"
+    
+    try {
+      const apiKey = typeof process !== 'undefined' && process.env && 
+                    (process.env as unknown as Record<string, string>)[API_KEY_ENV_VAR]
+      if (apiKey) {
+        extraEnvVars[API_KEY_ENV_VAR] = apiKey
+      }
+      
+      const apiBaseUrl = typeof process !== 'undefined' && process.env && 
+                        (process.env as unknown as Record<string, string>)[API_BASE_URL_ENV_VAR]
+      if (apiBaseUrl) {
+        extraEnvVars[API_BASE_URL_ENV_VAR] = apiBaseUrl
+      }
+    } catch (e) {
+      console.warn('Could not access environment variables:', e)
+    }
 
-    if (import.meta.env.TAURI_IS_FLATPAK === "true") {
-      this.sidecarCommand = ShellCommand.create("run-path-devpod-wrapper", args, {
-        env: { ...extraEnvVars, ["FLATPAK_ID"]: "sh.loft.devpod" },
+    const cliTypeProperty = 'cliType'
+    extraEnvVars[cliTypeProperty] = cliType
+    
+    let binaryPath = KLED_BINARY
+    if (cliType === 'kcluster') {
+      binaryPath = KCLUSTER_BINARY
+    } else if (cliType === 'kledspace') {
+      binaryPath = KLEDSPACE_BINARY
+    } else if (cliType === 'kpolicy') {
+      binaryPath = KPOLICY_BINARY
+    }
+    
+    const isFlatpak = typeof window !== 'undefined' && 
+                     window.hasOwnProperty('__TAURI__') && 
+                     (window as any).__TAURI__?.env?.TAURI_IS_FLATPAK === "true";
+                     
+    if (isFlatpak) {
+      this.sidecarCommand = ShellCommand.create("run-path-kled-wrapper", args, {
+        env: { ...extraEnvVars, ["FLATPAK_ID"]: "sh.spectrumwebco.kled" },
       })
     } else {
-      this.sidecarCommand = ShellCommand.sidecar(DEVPOD_BINARY, args, { env: extraEnvVars })
+      this.sidecarCommand = ShellCommand.sidecar(binaryPath, args, { env: extraEnvVars })
     }
     this.args = args
   }
@@ -108,7 +176,7 @@ export class Command implements TCommand<ChildProcess<string>> {
       }
 
       await new Promise((res, rej) => {
-        const stdoutListener: TEventListener<"data"> = (message) => {
+        const stdoutListener: TEventListener<"data"> = (message: string) => {
           try {
             const data = JSON.parse(message)
 
@@ -127,7 +195,7 @@ export class Command implements TCommand<ChildProcess<string>> {
             }
           }
         }
-        const stderrListener: TEventListener<"data"> = (message) => {
+        const stderrListener: TEventListener<"data"> = (message: string) => {
           try {
             const error = JSON.parse(message)
             listener({ type: "error", error })
@@ -147,7 +215,7 @@ export class Command implements TCommand<ChildProcess<string>> {
           this.childProcess = undefined
         }
 
-        this.sidecarCommand.on("close", ({ code }) => {
+        this.sidecarCommand.on("close", ({ code }: { code: number }) => {
           cleanup()
           if (code !== 0) {
             rej(new Error("exit code: " + code))
@@ -156,7 +224,7 @@ export class Command implements TCommand<ChildProcess<string>> {
           }
         })
 
-        this.sidecarCommand.on("error", (arg) => {
+        this.sidecarCommand.on("error", (arg: Error) => {
           cleanup()
           rej(arg)
         })
@@ -228,7 +296,7 @@ export function toFlagArg(flag: string, arg: string) {
 
 export function serializeRawOptions(
   rawOptions: Record<string, unknown>,
-  flag: string = DEVPOD_FLAG_OPTION
+  flag: string = FLAG_OPTION
 ): string[] {
   return Object.entries(rawOptions).map(([key, value]) => flag + `=${key}=${value}`)
 }
