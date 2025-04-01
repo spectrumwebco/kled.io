@@ -1,0 +1,15 @@
+[package]
+name = "spacetimedb-server"
+version = "0.1.0"
+edition = "2021"
+description = "SpacetimeDB server for Kled desktop application"
+
+[dependencies]
+spacetimedb = "0.8.2"
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.32", features = ["full"] }
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+uuid = { version = "1.6", features = ["v4"] }
+log = "0.4"

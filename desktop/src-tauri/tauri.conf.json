@@ -2,65 +2,103 @@
   "build": {
     "beforeDevCommand": "yarn dev",
     "beforeBuildCommand": "yarn build",
-    "devPath": "http://localhost:5173",
-    "distDir": "../dist",
-    "withGlobalTauri": true
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
   },
-  "package": {
-    "productName": "Kled",
-    "version": "0.1.0"
-  },
-  "tauri": {
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "io.kled.desktop",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "resources": [],
-      "externalBin": [],
-      "copyright": "© 2025 Spectrum Web Co",
-      "category": "DeveloperTool",
-      "shortDescription": "Kubernetes workspace management",
-      "longDescription": "Kled is a desktop application for managing Kubernetes workspaces, clusters, and policies.",
-      "deb": {
-        "depends": []
+  "bundle": {
+    "active": true,
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "nsis": {
+        "displayLanguageSelector": false,
+        "installMode": "currentUser"
       },
-      "macOS": {
-        "frameworks": [],
-        "minimumSystemVersion": "10.13",
-        "exceptionDomain": "",
-        "signingIdentity": null,
-        "entitlements": null
-      },
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+      "signCommand": ".\\sign.bat %1"
+    },
+    "category": "DeveloperTool",
+    "copyright": "",
+    "externalBin": [],
+    "resources": [],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "shortDescription": "Build AI-powered development environments with GPU acceleration",
+    "longDescription": "Kled.io provides AI-ready development environments with full CUDA support for your AI Agent. Built by Spectrum Web Co, Kled.io offers development environments that work with any IDE and support any cloud, kubernetes, or local docker setup.",
+    "targets": "all",
+    "macOS": {
+      "entitlements": "./entitlements.plist",
+      "exceptionDomain": "",
+      "frameworks": [],
+      "providerShortName": null,
+      "signingIdentity": null,
+      "dmg": {
+        "background": "dmg-background.png",
+        "windowSize": {
+          "width": 660,
+          "height": 400
+        },
+        "appPosition": {
+          "x": 180,
+          "y": 160
+        },
+        "applicationFolderPosition": {
+          "x": 480,
+          "y": 160
+        }
       }
     },
+    "linux": {
+      "deb": {
+        "depends": []
+      }
+    },
+    "createUpdaterArtifacts": "v1Compatible"
+  },
+  "productName": "Kled.io",
+  "mainBinaryName": "Kled Desktop",
+  "version": "../package.json",
+  "identifier": "au.com.spectrumwebco.kled",
+  "plugins": {
     "updater": {
-      "active": false
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEY1NDg1NDE4MzA1NDI3QjcKUldTM0oxUXdHRlJJOVhyNUtFc2xkNFZyTmE2R2w0dTRXTFF6OUVMSW03ekphejlPM3U1M2FHUCsK",
+      "windows": {
+        "installMode": "passive"
+      },
+      "endpoints": [
+        "https://update.kled.io/latest",
+        "https://github.com/spectrumwebco/kled/releases/latest/download/latest.json"
+      ]
+    }
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "macOSPrivateApi": true,
+    "security": {
+      "csp": null
     },
     "windows": [
       {
-        "title": "Kled",
+        "title": "Kled.io",
         "width": 1200,
         "height": 800,
-        "resizable": true,
+        "minWidth": 1000,
+        "minHeight": 700,
+        "x": 0,
+        "y": 0,
+        "focus": false,
+        "titleBarStyle": "Overlay",
         "fullscreen": false,
-        "decorations": true,
-        "transparent": false,
-        "center": true
+        "resizable": true,
+        "hiddenTitle": true,
+        "transparent": true,
+        "visible": false
       }
-    ],
-    "security": {
-      "csp": null
-    }
+    ]
   }
 }
