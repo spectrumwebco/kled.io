@@ -1,4 +1,4 @@
-name: Build Unified Kled CLI
+name: Build Unified Kled CLI and Desktop App
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
       - 'v*'
 
 jobs:
-  build-linux-windows:
+  build-cli-linux-windows:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -24,7 +24,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: '1.20'
+          go-version: '1.24.1'
 
       - name: Clone Private Repositories
         env:
@@ -41,23 +41,39 @@ jobs:
 
       - name: Build Unified CLI
         run: |
-          cd cli/unified
+          # Use Makefile to build CLI
+          make cli-cross-compile
           
-          # Build for target platform
-          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o kled-${{ matrix.os }}-${{ matrix.arch }}
+          # Create symlinks for all CLI interfaces
+          cd dist/${{ matrix.os }}-${{ matrix.arch }}
+          cp kled kcluster
+          cp kled kledspace
+          cp kled kpolicy
           
           # Add .exe extension for Windows
           if [ "${{ matrix.os }}" = "windows" ]; then
-            mv kled-${{ matrix.os }}-${{ matrix.arch }} kled-${{ matrix.os }}-${{ matrix.arch }}.exe
+            cp kled.exe kcluster.exe
+            cp kled.exe kledspace.exe
+            cp kled.exe kpolicy.exe
+          fi
+          
+          # Create distribution package
+          cd ../..
+          mkdir -p dist/packages
+          
+          if [ "${{ matrix.os }}" = "linux" ]; then
+            tar -czf dist/packages/kled-${{ matrix.os }}-${{ matrix.arch }}.tar.gz -C dist/${{ matrix.os }}-${{ matrix.arch }} .
+          elif [ "${{ matrix.os }}" = "windows" ]; then
+            zip -j dist/packages/kled-${{ matrix.os }}-${{ matrix.arch }}.zip dist/${{ matrix.os }}-${{ matrix.arch }}/*.exe
           fi
 
-      - name: Upload Artifacts
+      - name: Upload CLI Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: kled-${{ matrix.os }}-${{ matrix.arch }}
-          path: cli/unified/kled-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.os == 'windows' && '.exe' || '' }}
+          name: kled-cli-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/packages/kled-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.os == 'windows' && '.zip' || '.tar.gz' }}
 
-  build-macos:
+  build-cli-macos:
     runs-on: [self-hosted, macOS, ARM64, MIC_GITHUB_spectrumwebco]
     strategy:
       matrix:
@@ -70,7 +86,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: '1.20'
+          go-version: '1.24.1'
 
       - name: Clone Private Repositories
         env:
@@ -85,21 +101,146 @@ jobs:
           gh repo clone spectrumwebco/kledspace
           gh repo clone spectrumwebco/kpolicy
 
-      - name: Build Unified CLI
+      - name: Build Unified CLI for macOS
         run: |
-          cd cli/unified
+          # Use Makefile to build CLI
+          make cli-cross-compile
           
-          # Build for macOS
-          GOOS=darwin GOARCH=${{ matrix.arch }} go build -o kled-darwin-${{ matrix.arch }}
+          # Create symlinks for all CLI interfaces
+          cd dist/darwin-${{ matrix.arch }}
+          cp kled kcluster
+          cp kled kledspace
+          cp kled kpolicy
+          
+          # Create distribution package
+          cd ../..
+          mkdir -p dist/packages
+          tar -czf dist/packages/kled-darwin-${{ matrix.arch }}.tar.gz -C dist/darwin-${{ matrix.arch }} .
 
-      - name: Upload Artifacts
+      - name: Upload CLI Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: kled-darwin-${{ matrix.arch }}
-          path: cli/unified/kled-darwin-${{ matrix.arch }}
+          name: kled-cli-darwin-${{ matrix.arch }}
+          path: dist/packages/kled-darwin-${{ matrix.arch }}.tar.gz
+
+  build-desktop-linux:
+    runs-on: ubuntu-latest
+    needs: [build-cli-linux-windows]
+    
+    steps:
+      - name: Checkout kled.io Repository
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          
+      - name: Install Dependencies
+        run: |
+          cd desktop
+          yarn install
+          
+      - name: Build Desktop App for Linux
+        run: |
+          cd desktop
+          yarn tauri build
+          
+      - name: Create Debian Package
+        run: |
+          mkdir -p dist/packages
+          cp desktop/src-tauri/target/release/bundle/deb/*.deb dist/packages/kled-desktop-linux-amd64.deb
+          cp desktop/src-tauri/target/release/bundle/appimage/*.AppImage dist/packages/kled-desktop-linux-amd64.AppImage
+          
+      - name: Upload Desktop App Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: kled-desktop-linux
+          path: |
+            dist/packages/kled-desktop-linux-amd64.deb
+            dist/packages/kled-desktop-linux-amd64.AppImage
+
+  build-desktop-windows:
+    runs-on: windows-latest
+    needs: [build-cli-linux-windows]
+    
+    steps:
+      - name: Checkout kled.io Repository
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          
+      - name: Install Dependencies
+        run: |
+          cd desktop
+          yarn install
+          
+      - name: Build Desktop App for Windows
+        run: |
+          cd desktop
+          yarn tauri build
+          
+      - name: Create Windows Installer
+        run: |
+          mkdir -p dist/packages
+          copy desktop\src-tauri\target\release\bundle\msi\*.msi dist\packages\kled-desktop-windows-amd64.msi
+          
+      - name: Upload Desktop App Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: kled-desktop-windows
+          path: dist/packages/kled-desktop-windows-amd64.msi
+
+  build-desktop-macos:
+    runs-on: [self-hosted, macOS, ARM64, MIC_GITHUB_spectrumwebco]
+    needs: [build-cli-macos]
+    
+    steps:
+      - name: Checkout kled.io Repository
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        run: |
+          brew install node@18
+          echo 'export PATH="/usr/local/opt/node@18/bin:$PATH"' >> ~/.zshrc
+          source ~/.zshrc
+          
+      - name: Install Dependencies
+        run: |
+          cd desktop
+          yarn install
+          
+      - name: Build Desktop App for macOS
+        run: |
+          cd desktop
+          yarn tauri build
+          
+      - name: Create macOS DMG
+        run: |
+          mkdir -p dist/packages
+          cp desktop/src-tauri/target/release/bundle/dmg/*.dmg dist/packages/kled-desktop-macos-arm64.dmg
+          
+      - name: Upload Desktop App Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: kled-desktop-macos
+          path: dist/packages/kled-desktop-macos-arm64.dmg
 
   create-release:
-    needs: [build-linux-windows, build-macos]
+    needs: [build-cli-linux-windows, build-cli-macos, build-desktop-linux, build-desktop-windows, build-desktop-macos]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     
@@ -111,11 +252,15 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            kled-linux-amd64/kled-linux-amd64
-            kled-linux-arm64/kled-linux-arm64
-            kled-windows-amd64/kled-windows-amd64.exe
-            kled-darwin-amd64/kled-darwin-amd64
-            kled-darwin-arm64/kled-darwin-arm64
+            kled-cli-linux-amd64/kled-linux-amd64.tar.gz
+            kled-cli-linux-arm64/kled-linux-arm64.tar.gz
+            kled-cli-windows-amd64/kled-windows-amd64.zip
+            kled-cli-darwin-amd64/kled-darwin-amd64.tar.gz
+            kled-cli-darwin-arm64/kled-darwin-arm64.tar.gz
+            kled-desktop-linux/kled-desktop-linux-amd64.deb
+            kled-desktop-linux/kled-desktop-linux-amd64.AppImage
+            kled-desktop-windows/kled-desktop-windows-amd64.msi
+            kled-desktop-macos/kled-desktop-macos-arm64.dmg
           draft: false
           prerelease: false
         env:
