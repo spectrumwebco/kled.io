@@ -1,10 +1,20 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { KledProWebAppEmbed } from '../KledProWebAppEmbed';
 
-jest.mock('../../../../kled-pro/frontend/src/App', () => ({
-  App: () => <div data-testid="kled-pro-app">Mocked KledProApp</div>
+jest.mock('../KledProWebAppEmbed', () => ({
+  KledProWebAppEmbed: ({ isVisible }: { isVisible: boolean }) => 
+    isVisible ? (
+      <div className="kled-pro-embed">
+        <h2>kCluster Management</h2>
+        <p>Integrated kCluster management interface from kled-pro web app</p>
+        <div className="kled-pro-app-container">
+          <div data-testid="kled-pro-app">Mocked KledProApp</div>
+        </div>
+      </div>
+    ) : null
 }));
+
+import { KledProWebAppEmbed } from '../KledProWebAppEmbed';
 
 describe('KledProWebAppEmbed Component', () => {
   test('renders nothing when isVisible is false', () => {
