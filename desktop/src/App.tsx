@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ChakraProvider, Box, Flex, Heading, Text, Button, VStack, HStack, useToast } from '@chakra-ui/react';
 import { invoke } from '@tauri-apps/api/tauri';
+import CLIInterfaceNav from './components/CLIInterfaceNav';
 
 function App() {
   const [workspaces, setWorkspaces] = useState<string[]>([]);
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
+  const [currentCLIType, setCurrentCLIType] = useState<'kled' | 'kcluster' | 'kledspace' | 'kpolicy'>('kled');
   const toast = useToast();
 
   useEffect(() => {
@@ -62,56 +64,93 @@ function App() {
     }
   };
 
+  const handleCLIInterfaceChange = (cliType: 'kled' | 'kcluster' | 'kledspace' | 'kpolicy') => {
+    setCurrentCLIType(cliType);
+    if (cliType === 'kled') {
+      loadWorkspaces();
+    }
+  };
+
   return (
     <ChakraProvider>
       <Box p={5}>
-        <Heading mb={6}>Kled Workspace Manager</Heading>
+        <Heading mb={6}>Kled Command Center</Heading>
         
-        <Flex direction={{ base: 'column', md: 'row' }} gap={8}>
-          <Box flex={1}>
-            <Heading size="md" mb={4}>Workspaces</Heading>
-            <VStack align="stretch" spacing={4}>
-              {workspaces.length > 0 ? (
-                workspaces.map((workspace) => (
-                  <Box 
-                    key={workspace} 
-                    p={4} 
-                    borderWidth={1} 
-                    borderRadius="md" 
-                    _hover={{ bg: 'gray.50' }}
-                  >
-                    <Text fontWeight="bold">{workspace}</Text>
-                  </Box>
-                ))
-              ) : (
-                <Text color="gray.500">No workspaces found</Text>
-              )}
-            </VStack>
+        {/* CLI Interface Navigation */}
+        <CLIInterfaceNav onInterfaceChange={handleCLIInterfaceChange} />
+        
+        {/* Conditional rendering based on selected CLI interface */}
+        {currentCLIType === 'kled' && (
+          <Flex direction={{ base: 'column', md: 'row' }} gap={8}>
+            <Box flex={1}>
+              <Heading size="md" mb={4}>Workspaces</Heading>
+              <VStack align="stretch" spacing={4}>
+                {workspaces.length > 0 ? (
+                  workspaces.map((workspace) => (
+                    <Box 
+                      key={workspace} 
+                      p={4} 
+                      borderWidth={1} 
+                      borderRadius="md" 
+                      _hover={{ bg: 'gray.50' }}
+                    >
+                      <Text fontWeight="bold">{workspace}</Text>
+                    </Box>
+                  ))
+                ) : (
+                  <Text color="gray.500">No workspaces found</Text>
+                )}
+              </VStack>
+            </Box>
+            
+            <Box flex={1}>
+              <Heading size="md" mb={4}>Create Workspace</Heading>
+              <VStack align="stretch" spacing={4}>
+                <Box>
+                  <input
+                    type="text"
+                    value={newWorkspaceName}
+                    onChange={(e) => setNewWorkspaceName(e.target.value)}
+                    placeholder="Enter workspace name"
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      borderRadius: '4px',
+                      border: '1px solid #E2E8F0'
+                    }}
+                  />
+                </Box>
+                <Button colorScheme="blue" onClick={createWorkspace}>
+                  Create Workspace
+                </Button>
+              </VStack>
+            </Box>
+          </Flex>
+        )}
+        
+        {currentCLIType === 'kcluster' && (
+          <Box>
+            <Heading size="md" mb={4}>Kubernetes Cluster Management</Heading>
+            <Text>Interface for managing Kubernetes clusters using kcluster commands</Text>
+            {/* Add cluster management UI components here */}
           </Box>
-          
-          <Box flex={1}>
-            <Heading size="md" mb={4}>Create Workspace</Heading>
-            <VStack align="stretch" spacing={4}>
-              <Box>
-                <input
-                  type="text"
-                  value={newWorkspaceName}
-                  onChange={(e) => setNewWorkspaceName(e.target.value)}
-                  placeholder="Enter workspace name"
-                  style={{
-                    width: '100%',
-                    padding: '8px',
-                    borderRadius: '4px',
-                    border: '1px solid #E2E8F0'
-                  }}
-                />
-              </Box>
-              <Button colorScheme="blue" onClick={createWorkspace}>
-                Create Workspace
-              </Button>
-            </VStack>
+        )}
+        
+        {currentCLIType === 'kledspace' && (
+          <Box>
+            <Heading size="md" mb={4}>Kled Space Management</Heading>
+            <Text>Interface for managing application spaces using kledspace commands</Text>
+            {/* Add space management UI components here */}
           </Box>
-        </Flex>
+        )}
+        
+        {currentCLIType === 'kpolicy' && (
+          <Box>
+            <Heading size="md" mb={4}>Kubernetes Policy Management</Heading>
+            <Text>Interface for managing Kubernetes policies using kpolicy commands</Text>
+            {/* Add policy management UI components here */}
+          </Box>
+        )}
       </Box>
     </ChakraProvider>
   );
