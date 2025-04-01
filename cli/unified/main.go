@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func DetectCommandName() string {
+func detectCommandName() string {
 	execPath := os.Args[0]
 	execName := filepath.Base(execPath)
 	
@@ -29,7 +29,7 @@ func DetectCommandName() string {
 	return "kled"
 }
 
-func GetCommandFromArgs(args []string) string {
+func getCommandFromArgs(args []string) string {
 	if len(args) == 0 {
 		return ""
 	}
@@ -50,7 +50,7 @@ func GetCommandFromArgs(args []string) string {
 }
 
 func main() {
-	commandName := DetectCommandName()
+	commandName := detectCommandName()
 	
 	apiKey := os.Getenv("KLED_API_KEY")
 	if apiKey == "" {
