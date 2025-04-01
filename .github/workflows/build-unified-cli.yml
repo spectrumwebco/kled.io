@@ -248,15 +248,53 @@ jobs:
       - name: Download All Artifacts
         uses: actions/download-artifact@v3
         
+      - name: Extract CLI Binaries from Packages
+        run: |
+          # Create directories for extracted binaries
+          mkdir -p cli-binaries/linux-amd64 cli-binaries/linux-arm64 cli-binaries/windows-amd64 cli-binaries/darwin-amd64 cli-binaries/darwin-arm64
+          
+          # Extract Linux binaries
+          tar -xzf kled-cli-linux-amd64/kled-linux-amd64.tar.gz -C cli-binaries/linux-amd64
+          tar -xzf kled-cli-linux-arm64/kled-linux-arm64.tar.gz -C cli-binaries/linux-arm64
+          
+          # Extract Windows binaries
+          unzip -o kled-cli-windows-amd64/kled-windows-amd64.zip -d cli-binaries/windows-amd64
+          
+          # Extract macOS binaries
+          tar -xzf kled-cli-darwin-amd64/kled-darwin-amd64.tar.gz -C cli-binaries/darwin-amd64
+          tar -xzf kled-cli-darwin-arm64/kled-darwin-arm64.tar.gz -C cli-binaries/darwin-arm64
+      
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            kled-cli-linux-amd64/kled-linux-amd64.tar.gz
-            kled-cli-linux-arm64/kled-linux-arm64.tar.gz
-            kled-cli-windows-amd64/kled-windows-amd64.zip
-            kled-cli-darwin-amd64/kled-darwin-amd64.tar.gz
-            kled-cli-darwin-arm64/kled-darwin-arm64.tar.gz
+            # CLI Binaries - Linux
+            cli-binaries/linux-amd64/kled
+            cli-binaries/linux-amd64/kcluster
+            cli-binaries/linux-amd64/kledspace
+            cli-binaries/linux-amd64/kpolicy
+            cli-binaries/linux-arm64/kled
+            cli-binaries/linux-arm64/kcluster
+            cli-binaries/linux-arm64/kledspace
+            cli-binaries/linux-arm64/kpolicy
+            
+            # CLI Binaries - Windows
+            cli-binaries/windows-amd64/kled.exe
+            cli-binaries/windows-amd64/kcluster.exe
+            cli-binaries/windows-amd64/kledspace.exe
+            cli-binaries/windows-amd64/kpolicy.exe
+            
+            # CLI Binaries - macOS
+            cli-binaries/darwin-amd64/kled
+            cli-binaries/darwin-amd64/kcluster
+            cli-binaries/darwin-amd64/kledspace
+            cli-binaries/darwin-amd64/kpolicy
+            cli-binaries/darwin-arm64/kled
+            cli-binaries/darwin-arm64/kcluster
+            cli-binaries/darwin-arm64/kledspace
+            cli-binaries/darwin-arm64/kpolicy
+            
+            # Desktop App Installers
             kled-desktop-linux/kled-desktop-linux-amd64.deb
             kled-desktop-linux/kled-desktop-linux-amd64.AppImage
             kled-desktop-windows/kled-desktop-windows-amd64.msi
