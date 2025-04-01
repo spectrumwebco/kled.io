@@ -4,16 +4,36 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
-	"github.com/spectrumwebco/kled.io/cli/pkg/api/unified"
 	"github.com/spf13/cobra"
 )
 
-func main() {
-	commandName := unified.DetectCommandName()
+func DetectCommandName() string {
+	execPath := os.Args[0]
+	execName := filepath.Base(execPath)
 	
-	apiKey := unified.GetAPIKey(commandName)
-	apiBaseURL := unified.GetAPIBaseURL(commandName)
+	execName = strings.TrimSuffix(execName, filepath.Ext(execName))
+	
+	knownCommands := map[string]bool{
+		"kled":      true,
+		"kcluster":  true,
+		"kledspace": true,
+		"kpolicy":   true,
+	}
+	
+	if knownCommands[execName] {
+		return execName
+	}
+	
+	return "kled"
+}
+
+func main() {
+	commandName := DetectCommandName()
+	
+	apiKey := ""
+	apiBaseURL := ""
 	
 	var rootCmd *cobra.Command
 	
