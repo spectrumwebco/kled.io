@@ -1,0 +1,112 @@
+name: Test Unified CLI and Desktop App
+
+on:
+  pull_request:
+    branches: [ main, staging ]
+  push:
+    branches: [ main, staging ]
+
+jobs:
+  test-cli:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.24.1'
+          
+      - name: Install dependencies
+        run: |
+          cd cli/unified
+          go mod download
+          
+      - name: Run CLI tests
+        run: |
+          cd cli/unified
+          go test -v ./...
+          cd ../pkg/api/unified
+          go test -v ./...
+          
+      - name: Lint Go code
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          working-directory: cli
+          
+  test-desktop:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: |
+          cd desktop
+          yarn install
+          
+      - name: Run desktop tests
+        run: |
+          cd desktop
+          yarn test
+          
+      - name: Lint TypeScript code
+        run: |
+          cd desktop
+          yarn lint
+          
+  test-integration:
+    runs-on: ubuntu-latest
+    needs: [test-cli, test-desktop]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.24.1'
+          
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: |
+          cd cli/unified
+          go mod download
+          cd ../../desktop
+          yarn install
+          
+      - name: Build CLI
+        run: |
+          make cli
+          
+      - name: Test CLI binary detection
+        run: |
+          # Create symlinks for all CLI interfaces
+          cp bin/kled bin/kcluster
+          cp bin/kled bin/kledspace
+          cp bin/kled bin/kpolicy
+          
+          # Test each CLI interface
+          bin/kled --version
+          bin/kcluster --version
+          bin/kledspace --version
+          bin/kpolicy --version
+          
+      - name: Test desktop app build
+        run: |
+          cd desktop
+          yarn build

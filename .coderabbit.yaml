@@ -1,0 +1,35 @@
+
+
+reviews:
+  comment_style: line
+  hide_praise: false
+  line_comments: true
+  ignore_allowlist:
+    - "**/*.lock"
+    - "**/*.md"
+  auto_review:
+    enabled: true
+  review_status: true
+  commenting:
+    enable: true
+  summary:
+    enable: true
+
+settings:
+  allow_bot_users: true
+  required_reviewer: true
+
+prs:
+  title:
+    enable: false
+  description:
+    enable: false
+
+chat:
+  enable: true
+  allow_bot_users: true
+
+integrations:
+  kevins_duties:
+    enable: true
+    allow_devin_ai: true
