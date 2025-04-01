@@ -1,0 +1,30 @@
+
+
+version: 2
+
+settings:
+  allow_bot_users: true
+  required_reviewer: true
+
+reviews:
+  auto_review: true
+  review_status: true
+  commenting:
+    enable: true
+  summary:
+    enable: true
+
+prs:
+  title:
+    enable: false
+  description:
+    enable: false
+
+chat:
+  enable: true
+  allow_bot_users: true
+
+integrations:
+  kevins_duties:
+    enable: true
+    allow_devin_ai: true
