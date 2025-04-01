@@ -1,0 +1,122 @@
+name: Build Unified Kled CLI
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-linux-windows:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [linux, windows]
+        arch: [amd64, arm64]
+        exclude:
+          - os: windows
+            arch: arm64
+
+    steps:
+      - name: Checkout kled.io Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.20'
+
+      - name: Clone Private Repositories
+        env:
+          GH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        run: |
+          mkdir -p private-repos
+          cd private-repos
+          
+          # Clone private repos
+          gh repo clone spectrumwebco/kled
+          gh repo clone spectrumwebco/kled-pro
+          gh repo clone spectrumwebco/kledspace
+          gh repo clone spectrumwebco/kpolicy
+
+      - name: Build Unified CLI
+        run: |
+          cd cli/unified
+          
+          # Build for target platform
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o kled-${{ matrix.os }}-${{ matrix.arch }}
+          
+          # Add .exe extension for Windows
+          if [ "${{ matrix.os }}" = "windows" ]; then
+            mv kled-${{ matrix.os }}-${{ matrix.arch }} kled-${{ matrix.os }}-${{ matrix.arch }}.exe
+          fi
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: kled-${{ matrix.os }}-${{ matrix.arch }}
+          path: cli/unified/kled-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.os == 'windows' && '.exe' || '' }}
+
+  build-macos:
+    runs-on: [self-hosted, macOS, ARM64, MIC_GITHUB_spectrumwebco]
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+
+    steps:
+      - name: Checkout kled.io Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.20'
+
+      - name: Clone Private Repositories
+        env:
+          GH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        run: |
+          mkdir -p private-repos
+          cd private-repos
+          
+          # Clone private repos
+          gh repo clone spectrumwebco/kled
+          gh repo clone spectrumwebco/kled-pro
+          gh repo clone spectrumwebco/kledspace
+          gh repo clone spectrumwebco/kpolicy
+
+      - name: Build Unified CLI
+        run: |
+          cd cli/unified
+          
+          # Build for macOS
+          GOOS=darwin GOARCH=${{ matrix.arch }} go build -o kled-darwin-${{ matrix.arch }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: kled-darwin-${{ matrix.arch }}
+          path: cli/unified/kled-darwin-${{ matrix.arch }}
+
+  create-release:
+    needs: [build-linux-windows, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v3
+        
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            kled-linux-amd64/kled-linux-amd64
+            kled-linux-arm64/kled-linux-arm64
+            kled-windows-amd64/kled-windows-amd64.exe
+            kled-darwin-amd64/kled-darwin-amd64
+            kled-darwin-arm64/kled-darwin-arm64
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
