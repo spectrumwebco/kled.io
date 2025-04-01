@@ -13,10 +13,10 @@ cli:
 	@echo "Building CLI tools..."
 	@mkdir -p bin
 	@cd cli/unified && go build -o ../../bin/kled-unified
-	@ln -sf kled-unified bin/kled
-	@ln -sf kled-unified bin/kcluster
-	@ln -sf kled-unified bin/kledspace
-	@ln -sf kled-unified bin/kpolicy
+	@cp bin/kled-unified bin/kled
+	@cp bin/kled-unified bin/kcluster
+	@cp bin/kled-unified bin/kledspace
+	@cp bin/kled-unified bin/kpolicy
 	@echo "CLI tools build complete!"
 
 # Build desktop app
@@ -52,6 +52,29 @@ cross-compile:
 	@cd cli/unified && GOOS=darwin GOARCH=arm64 go build -o ../../bin/kled-darwin-arm64
 	# Windows AMD64
 	@cd cli/unified && GOOS=windows GOARCH=amd64 go build -o ../../bin/kled-windows-amd64.exe
+	
+	# Create distribution packages with unified binary
+	@mkdir -p dist/linux-amd64 dist/linux-arm64 dist/darwin-amd64 dist/darwin-arm64 dist/windows-amd64
+	
+	# Linux AMD64
+	@cp bin/kled-linux-amd64 dist/linux-amd64/kled
+	@chmod +x dist/linux-amd64/kled
+	
+	# Linux ARM64
+	@cp bin/kled-linux-arm64 dist/linux-arm64/kled
+	@chmod +x dist/linux-arm64/kled
+	
+	# macOS AMD64
+	@cp bin/kled-darwin-amd64 dist/darwin-amd64/kled
+	@chmod +x dist/darwin-amd64/kled
+	
+	# macOS ARM64
+	@cp bin/kled-darwin-arm64 dist/darwin-arm64/kled
+	@chmod +x dist/darwin-arm64/kled
+	
+	# Windows AMD64
+	@cp bin/kled-windows-amd64.exe dist/windows-amd64/kled.exe
+	
 	@echo "Cross-compilation complete!"
 
 # Install CLI tools locally
