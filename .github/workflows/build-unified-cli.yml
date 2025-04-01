@@ -198,11 +198,14 @@ jobs:
           # Verify the installer exists
           if (Test-Path -Path "dist\packages\kled-desktop-windows-amd64.exe") {
             echo "Windows installer created successfully"
-            # Run basic validation on the installer
-            $fileInfo = Get-Item "dist\packages\kled-desktop-windows-amd64.exe"
-            echo "Installer size: $($fileInfo.Length) bytes"
-            echo "Installer created: $($fileInfo.CreationTime)"
-            echo "Installer is valid: True"
+            
+            # Run comprehensive validation script
+            .\scripts\validate-installer.ps1 -InstallerPath "dist\packages\kled-desktop-windows-amd64.exe"
+            
+            if ($LASTEXITCODE -ne 0) {
+              echo "Installer validation failed"
+              exit 1
+            }
           } else {
             echo "Error: Windows installer not found"
             exit 1
