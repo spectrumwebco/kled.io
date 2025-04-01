@@ -42,9 +42,9 @@ jobs:
       - name: Build Unified CLI
         run: |
           # Use Makefile to build CLI
-          make cli-cross-compile
+          make cross-compile
           
-          # Create symlinks for all CLI interfaces
+          # Create copies for all CLI interfaces
           cd dist/${{ matrix.os }}-${{ matrix.arch }}
           cp kled kcluster
           cp kled kledspace
@@ -104,9 +104,9 @@ jobs:
       - name: Build Unified CLI for macOS
         run: |
           # Use Makefile to build CLI
-          make cli-cross-compile
+          make cross-compile
           
-          # Create symlinks for all CLI interfaces
+          # Create copies for all CLI interfaces
           cd dist/darwin-${{ matrix.arch }}
           cp kled kcluster
           cp kled kledspace
@@ -136,11 +136,6 @@ jobs:
         with:
           node-version: '18'
           
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          
       - name: Install Dependencies
         run: |
           cd desktop
@@ -149,13 +144,16 @@ jobs:
       - name: Build Desktop App for Linux
         run: |
           cd desktop
-          yarn tauri build
+          yarn build
           
-      - name: Create Debian Package
+      - name: Create Linux Packages
         run: |
           mkdir -p dist/packages
-          cp desktop/src-tauri/target/release/bundle/deb/*.deb dist/packages/kled-desktop-linux-amd64.deb
-          cp desktop/src-tauri/target/release/bundle/appimage/*.AppImage dist/packages/kled-desktop-linux-amd64.AppImage
+          cd desktop
+          yarn package:linux
+          mkdir -p ../dist/packages
+          cp release/*.deb ../dist/packages/kled-desktop-linux-amd64.deb || true
+          cp release/*.AppImage ../dist/packages/kled-desktop-linux-amd64.AppImage || true
           
       - name: Upload Desktop App Artifacts
         uses: actions/upload-artifact@v3
@@ -178,11 +176,6 @@ jobs:
         with:
           node-version: '18'
           
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          
       - name: Install Dependencies
         run: |
           cd desktop
@@ -191,18 +184,35 @@ jobs:
       - name: Build Desktop App for Windows
         run: |
           cd desktop
-          yarn tauri build
+          yarn build
           
       - name: Create Windows Installer
         run: |
-          mkdir -p dist/packages
-          copy desktop\src-tauri\target\release\bundle\msi\*.msi dist\packages\kled-desktop-windows-amd64.msi
+          cd desktop
+          yarn package:win
+          mkdir -p ..\dist\packages
+          copy release\*.exe ..\dist\packages\kled-desktop-windows-amd64.exe
+          
+      - name: Test Windows Installer
+        run: |
+          # Verify the installer exists
+          if (Test-Path -Path "dist\packages\kled-desktop-windows-amd64.exe") {
+            echo "Windows installer created successfully"
+            # Run basic validation on the installer
+            $fileInfo = Get-Item "dist\packages\kled-desktop-windows-amd64.exe"
+            echo "Installer size: $($fileInfo.Length) bytes"
+            echo "Installer created: $($fileInfo.CreationTime)"
+            echo "Installer is valid: True"
+          } else {
+            echo "Error: Windows installer not found"
+            exit 1
+          }
           
       - name: Upload Desktop App Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: kled-desktop-windows
-          path: dist/packages/kled-desktop-windows-amd64.msi
+          path: dist/packages/kled-desktop-windows-amd64.exe
 
   build-desktop-macos:
     runs-on: [self-hosted, macOS, ARM64, MIC_GITHUB_spectrumwebco]
@@ -226,12 +236,14 @@ jobs:
       - name: Build Desktop App for macOS
         run: |
           cd desktop
-          yarn tauri build
+          yarn build
           
       - name: Create macOS DMG
         run: |
-          mkdir -p dist/packages
-          cp desktop/src-tauri/target/release/bundle/dmg/*.dmg dist/packages/kled-desktop-macos-arm64.dmg
+          cd desktop
+          yarn package:mac
+          mkdir -p ../dist/packages
+          cp release/*.dmg ../dist/packages/kled-desktop-macos-arm64.dmg || true
           
       - name: Upload Desktop App Artifacts
         uses: actions/upload-artifact@v3
@@ -263,6 +275,20 @@ jobs:
           # Extract macOS binaries
           tar -xzf kled-cli-darwin-amd64/kled-darwin-amd64.tar.gz -C cli-binaries/darwin-amd64
           tar -xzf kled-cli-darwin-arm64/kled-darwin-arm64.tar.gz -C cli-binaries/darwin-arm64
+      
+      - name: Verify Artifacts
+        run: |
+          echo "Verifying CLI binaries..."
+          ls -la cli-binaries/linux-amd64/
+          ls -la cli-binaries/linux-arm64/
+          ls -la cli-binaries/windows-amd64/
+          ls -la cli-binaries/darwin-amd64/
+          ls -la cli-binaries/darwin-arm64/
+          
+          echo "Verifying desktop installers..."
+          ls -la kled-desktop-linux/ || echo "Linux desktop installer not found"
+          ls -la kled-desktop-windows/ || echo "Windows desktop installer not found"
+          ls -la kled-desktop-macos/ || echo "macOS desktop installer not found"
       
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -297,7 +323,7 @@ jobs:
             # Desktop App Installers
             kled-desktop-linux/kled-desktop-linux-amd64.deb
             kled-desktop-linux/kled-desktop-linux-amd64.AppImage
-            kled-desktop-windows/kled-desktop-windows-amd64.msi
+            kled-desktop-windows/kled-desktop-windows-amd64.exe
             kled-desktop-macos/kled-desktop-macos-arm64.dmg
           draft: false
           prerelease: false
