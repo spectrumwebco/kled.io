@@ -131,8 +131,16 @@ function App() {
         {currentCLIType === 'kcluster' && (
           <Box>
             <Heading size="md" mb={4}>Kubernetes Cluster Management</Heading>
-            <Text>Interface for managing Kubernetes clusters using kcluster commands</Text>
-            {/* Add cluster management UI components here */}
+            <Text mb={4}>Interface for managing Kubernetes clusters using kcluster commands</Text>
+            {/* Import KledProWebAppEmbed component when TypeScript dependencies are resolved */}
+            {/* <KledProWebAppEmbed isVisible={true} /> */}
+            <Box p={4} borderWidth={1} borderRadius="md">
+              <Heading size="sm" mb={2}>kCluster Features</Heading>
+              <Text>• Create and manage Kubernetes clusters</Text>
+              <Text>• Connect to existing clusters</Text>
+              <Text>• Monitor cluster health and resources</Text>
+              <Text>• Manage cluster access and permissions</Text>
+            </Box>
           </Box>
         )}
         
