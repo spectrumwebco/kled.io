@@ -1,0 +1,197 @@
+name: Build Unified CLI
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          # Linux builds
+          - os: ubuntu-latest
+            target_os: linux
+            target_arch: amd64
+            binary_ext: ""
+          - os: ubuntu-latest
+            target_os: linux
+            target_arch: arm64
+            binary_ext: ""
+          
+          # macOS builds
+          - os: MIC_GITHUB_spectrumwebco
+            target_os: darwin
+            target_arch: arm64
+            binary_ext: ""
+          - os: macos-latest
+            target_os: darwin
+            target_arch: amd64
+            binary_ext: ""
+          
+          # Windows builds
+          - os: windows-latest
+            target_os: windows
+            target_arch: amd64
+            binary_ext: ".exe"
+
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - name: Checkout kled.io repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.18'
+          
+      - name: Set up Git Authentication
+        env:
+          GH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        run: |
+          git config --global url."https://${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
+        shell: bash
+          
+      - name: Clone Private Repositories
+        env:
+          GH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        run: |
+          mkdir -p temp/kled temp/kled-pro temp/kledspace temp/kpolicy
+          
+          # Clone private repos
+          gh repo clone spectrumwebco/kled temp/kled
+          gh repo clone spectrumwebco/kled-pro temp/kled-pro
+          gh repo clone spectrumwebco/kledspace temp/kledspace
+          gh repo clone spectrumwebco/kpolicy temp/kpolicy
+          
+          # Create directories for command imports
+          mkdir -p cli/unified/cmd
+        shell: bash
+          
+      - name: Prepare Build Environment
+        run: |
+          # Create directories for build output
+          mkdir -p dist
+          
+          # Copy necessary files from private repositories
+          cp -r temp/kled/cmd cli/unified/cmd/kled
+          cp -r temp/kled-pro/cmd cli/unified/cmd/kcluster
+          cp -r temp/kledspace/cmd cli/unified/cmd/kledspace
+          cp -r temp/kpolicy/cmd cli/unified/cmd/kpolicy
+          
+          # Copy necessary package dependencies
+          mkdir -p cli/unified/pkg
+          cp -r temp/kled/pkg cli/unified/pkg/kled
+          cp -r temp/kled-pro/pkg cli/unified/pkg/kled-pro
+          cp -r temp/kledspace/pkg cli/unified/pkg/kledspace
+          cp -r temp/kpolicy/pkg cli/unified/pkg/kpolicy
+        shell: bash
+          
+      - name: Update Unified CLI Implementation
+        run: |
+          cat > cli/unified/main.go << 'EOF'
+          package main
+
+          import (
+            "fmt"
+            "os"
+
+            "github.com/spf13/cobra"
+            
+            kledcmd "github.com/spectrumwebco/kled.io/cli/unified/cmd/kled"
+            kclustercmd "github.com/spectrumwebco/kled.io/cli/unified/cmd/kcluster"
+            kledspacecmd "github.com/spectrumwebco/kled.io/cli/unified/cmd/kledspace"
+            kpolicycmd "github.com/spectrumwebco/kled.io/cli/unified/cmd/kpolicy"
+          )
+
+          func main() {
+            // Create the root command
+            rootCmd := &cobra.Command{
+              Use:   "kled",
+              Short: "Kled - Kubernetes development and management platform",
+              Long: `Kled is a comprehensive platform for Kubernetes development and management.
+          It combines multiple tools into a single unified CLI:
+          - kled cluster: Kubernetes cluster management
+          - kled space: Kubernetes workspace management
+          - kled policy: Kubernetes policy management
+          - kled pro: Pro features and enterprise functionality`,
+              Run: func(cmd *cobra.Command, args []string) {
+                if len(args) == 0 {
+                  cmd.Help()
+                  os.Exit(0)
+                }
+              },
+            }
+
+            // Add version command
+            rootCmd.AddCommand(&cobra.Command{
+              Use:   "version",
+              Short: "Print the version of Kled",
+              Run: func(cmd *cobra.Command, args []string) {
+                fmt.Println("Kled v0.1.0")
+              },
+            })
+
+            // Add commands from each tool
+            rootCmd.AddCommand(
+              kledcmd.NewRootCmd(),
+              kclustercmd.NewClusterCmd(),
+              kledspacecmd.NewSpaceCmd(),
+              kpolicycmd.NewPolicyCmd(),
+            )
+
+            // Execute the root command
+            if err := rootCmd.Execute(); err != nil {
+              fmt.Println(err)
+              os.Exit(1)
+            }
+          }
+          EOF
+          
+          # Update go.mod
+          cat > cli/unified/go.mod << 'EOF'
+          module github.com/spectrumwebco/kled.io/cli/unified
+
+          go 1.18
+
+          require (
+            github.com/spf13/cobra v1.7.0
+          )
+
+          require (
+            github.com/inconshreveable/mousetrap v1.1.0 // indirect
+            github.com/spf13/pflag v1.0.5 // indirect
+          )
+          EOF
+        shell: bash
+          
+      - name: Build Unified CLI
+        run: |
+          cd cli/unified
+          GOOS=${{ matrix.target_os }} GOARCH=${{ matrix.target_arch }} go build -o ../../dist/kled-${{ matrix.target_os }}-${{ matrix.target_arch }}${{ matrix.binary_ext }}
+        shell: bash
+          
+      - name: Upload Binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: kled-${{ matrix.target_os }}-${{ matrix.target_arch }}
+          path: dist/kled-${{ matrix.target_os }}-${{ matrix.target_arch }}${{ matrix.binary_ext }}
+          
+      - name: Create Release Assets
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          mkdir -p release-assets
+          cp dist/kled-${{ matrix.target_os }}-${{ matrix.target_arch }}${{ matrix.binary_ext }} release-assets/
+        shell: bash
+          
+      - name: Upload Release Assets
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release-assets/*
+          token: ${{ secrets.GITHUB_TOKEN }}
