@@ -3,27 +3,38 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/spectrumwebco/kled.io/cli/pkg/api/unified"
 	"github.com/spf13/cobra"
 )
 
 func main() {
-	rootCmd := &cobra.Command{
-		Use:   "kled",
-		Short: "Kled - Kubernetes development and management platform",
-		Long: `Kled is a comprehensive platform for Kubernetes development and management.
-It combines multiple tools into a single unified CLI:
-- kled cluster: Kubernetes cluster management
-- kled space: Kubernetes workspace management
-- kled policy: Kubernetes policy management
-- kled pro: Pro features and enterprise functionality`,
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) == 0 {
-				cmd.Help()
-				os.Exit(0)
-			}
-		},
+	commandName := unified.DetectCommandName()
+	
+	apiKey := unified.GetAPIKey(commandName)
+	apiBaseURL := unified.GetAPIBaseURL(commandName)
+	
+	var rootCmd *cobra.Command
+	
+	switch commandName {
+	case "kcluster":
+		rootCmd = createKClusterRootCmd(apiKey, apiBaseURL)
+	case "kledspace":
+		rootCmd = createKledSpaceRootCmd(apiKey, apiBaseURL)
+	case "kpolicy":
+		rootCmd = createKPolicyRootCmd(apiKey, apiBaseURL)
+	default:
+		rootCmd = createKledRootCmd(apiKey, apiBaseURL)
 	}
+	
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "version",
+		Short: "Print the version",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Printf("%s v0.1.0\n", commandName)
+		},
+	})
 
 	rootCmd.AddCommand(&cobra.Command{
 		Use:   "version",
@@ -170,10 +181,151 @@ It combines multiple tools into a single unified CLI:
 		},
 	)
 
-	rootCmd.AddCommand(spaceCmd, clusterCmd, policyCmd, proCmd)
+	if commandName == "kled" {
+		rootCmd.AddCommand(spaceCmd, clusterCmd, policyCmd, proCmd)
+	}
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+func createKledRootCmd(apiKey, apiBaseURL string) *cobra.Command {
+	return &cobra.Command{
+		Use:   "kled",
+		Short: "Kled - Kubernetes development and management platform",
+		Long: `Kled is a comprehensive platform for Kubernetes development and management.
+It combines multiple tools into a single unified CLI:
+- kled cluster: Kubernetes cluster management
+- kled space: Kubernetes workspace management
+- kled policy: Kubernetes policy management
+- kled pro: Pro features and enterprise functionality`,
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+}
+
+func createKClusterRootCmd(apiKey, apiBaseURL string) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "kcluster",
+		Short: "Kubernetes cluster management",
+		Long:  "KCluster provides tools for creating and managing Kubernetes clusters",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+	
+	cmd.AddCommand(
+		&cobra.Command{
+			Use:   "create",
+			Short: "Create a new cluster",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Creating KCluster cluster...")
+			},
+		},
+		&cobra.Command{
+			Use:   "connect",
+			Short: "Connect to a cluster",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Connecting to KCluster cluster...")
+			},
+		},
+		&cobra.Command{
+			Use:   "delete",
+			Short: "Delete a cluster",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Deleting KCluster cluster...")
+			},
+		},
+	)
+	
+	return cmd
+}
+
+func createKledSpaceRootCmd(apiKey, apiBaseURL string) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "kledspace",
+		Short: "Kubernetes workspace management",
+		Long:  "KledSpace provides tools for managing Kubernetes workspaces and development environments",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+	
+	cmd.AddCommand(
+		&cobra.Command{
+			Use:   "init",
+			Short: "Initialize a new project",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Initializing KledSpace project...")
+			},
+		},
+		&cobra.Command{
+			Use:   "dev",
+			Short: "Start development mode",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Starting KledSpace development mode...")
+			},
+		},
+		&cobra.Command{
+			Use:   "deploy",
+			Short: "Deploy resources",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Deploying resources with KledSpace...")
+			},
+		},
+	)
+	
+	return cmd
+}
+
+func createKPolicyRootCmd(apiKey, apiBaseURL string) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "kpolicy",
+		Short: "Kubernetes policy management",
+		Long:  "KPolicy provides tools for managing Kubernetes policies",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+	
+	cmd.AddCommand(
+		&cobra.Command{
+			Use:   "apply",
+			Short: "Apply a policy",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Applying KPolicy policy...")
+			},
+		},
+		&cobra.Command{
+			Use:   "list",
+			Short: "List policies",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Listing KPolicy policies...")
+			},
+		},
+		&cobra.Command{
+			Use:   "validate",
+			Short: "Validate a policy",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Validating KPolicy policy...")
+			},
+		},
+	)
+	
+	return cmd
 }
