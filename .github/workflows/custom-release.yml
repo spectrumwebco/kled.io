@@ -1,0 +1,58 @@
+name: Custom Release Without Source Code
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for the release'
+        required: true
+        default: 'v0.1.0'
+      release_title:
+        description: 'Release title'
+        required: true
+        default: 'Kled.io v0.1.0'
+      release_notes:
+        description: 'Release notes'
+        required: true
+        default: 'Initial release of Kled.io with desktop applications and CLI tools for Windows, macOS, and Linux.'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.tag_name }}
+          release_name: ${{ github.event.inputs.release_title }}
+          body: ${{ github.event.inputs.release_notes }}
+          draft: false
+          prerelease: false
+          
+      - name: Upload CLI Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/kled
+          asset_name: kled
+          asset_content_type: application/octet-stream
+          
+      - name: Upload Desktop Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/kled-desktop-0.1.0.AppImage
+          asset_name: kled-desktop-0.1.0.AppImage
+          asset_content_type: application/octet-stream
