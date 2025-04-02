@@ -1,0 +1,10 @@
+server:
+  dev:
+    enabled: false
+  ha:
+    enabled: true
+    replicas: 3
+  service:
+    type: ClusterIP
+ui:
+  enabled: true

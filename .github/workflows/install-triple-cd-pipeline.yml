@@ -1,0 +1,47 @@
+name: Install Triple CD Pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'k8s/**'
+
+jobs:
+  deploy-cd-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        
+      - name: Set up Flux
+        uses: fluxcd/flux2/action@main
+        
+      - name: Install FluxCD
+        run: |
+          flux bootstrap github \
+            --owner=spectrumwebco \
+            --repository=kled.io \
+            --path=k8s/flux \
+            --personal
+            
+      - name: Install ArgoCD
+        run: |
+          kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+          kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+          kubectl apply -f k8s/argo/argo-system.yaml
+          
+      - name: Install Vault
+        run: |
+          kubectl create namespace vault --dry-run=client -o yaml | kubectl apply -f -
+          kubectl apply -f k8s/vault/vault.yaml
+          
+      - name: Setup Hydra
+        run: |
+          # Deploy Hydra using NixOS configuration
+          # This would require a more complex setup, possibly using NixOps or similar
+          echo "Hydra setup would be done here"

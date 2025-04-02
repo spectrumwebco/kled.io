@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: spacetime-db
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/spectrumwebco/kled.io.git
+    targetRevision: HEAD
+    path: k8s/argo/components/spacetime-db
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: spacetime
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: supabase
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/spectrumwebco/kled.io.git
+    targetRevision: HEAD
+    path: k8s/argo/components/supabase
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: supabase
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarqube
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/spectrumwebco/kled.io.git
+    targetRevision: HEAD
+    path: k8s/argo/components/sonarqube
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: sonarqube
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func detectCommandName() string {
+func DetectCommandName() string {
 	execPath := os.Args[0]
 	execName := filepath.Base(execPath)
 	
@@ -20,6 +20,7 @@ func detectCommandName() string {
 		"kcluster":  true,
 		"kledspace": true,
 		"kpolicy":   true,
+		"sonarqube": true,
 	}
 	
 	if knownCommands[execName] {
@@ -71,6 +72,8 @@ func main() {
 		rootCmd = createKledSpaceRootCmd(apiKey, apiBaseURL)
 	case "kpolicy":
 		rootCmd = createKPolicyRootCmd(apiKey, apiBaseURL)
+	case "sonarqube":
+		rootCmd = createSonarqubeRootCmd(apiKey, apiBaseURL)
 	default:
 		rootCmd = createKledRootCmd(apiKey, apiBaseURL)
 	}
@@ -228,8 +231,46 @@ func main() {
 		},
 	)
 
+	sonarqubeCmd := &cobra.Command{
+		Use:   "sonarqube",
+		Short: "SonarQube integration",
+		Long:  "Manage SonarQube integrations for code quality analysis",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+
+	sonarqubeCmd.AddCommand(
+		&cobra.Command{
+			Use:   "analyze [project]",
+			Short: "Analyze a project with SonarQube",
+			Args:  cobra.MinimumNArgs(1),
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Printf("Analyzing project %s with SonarQube...\n", args[0])
+			},
+		},
+		&cobra.Command{
+			Use:   "report [project]",
+			Short: "Get reports from SonarQube",
+			Args:  cobra.MinimumNArgs(1),
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Printf("Getting SonarQube reports for project %s...\n", args[0])
+			},
+		},
+		&cobra.Command{
+			Use:   "configure",
+			Short: "Configure SonarQube integration",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Configuring SonarQube integration...")
+			},
+		},
+	)
+
 	if commandName == "kled" {
-		rootCmd.AddCommand(spaceCmd, clusterCmd, policyCmd, proCmd)
+		rootCmd.AddCommand(spaceCmd, clusterCmd, policyCmd, proCmd, sonarqubeCmd)
 	}
 
 	if err := rootCmd.Execute(); err != nil {
@@ -370,6 +411,48 @@ func createKPolicyRootCmd(apiKey, apiBaseURL string) *cobra.Command {
 			Short: "Validate a policy",
 			Run: func(cmd *cobra.Command, args []string) {
 				fmt.Println("Validating KPolicy policy...")
+			},
+		},
+	)
+	
+	return cmd
+}
+
+func createSonarqubeRootCmd(apiKey, apiBaseURL string) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "sonarqube",
+		Short: "SonarQube integration",
+		Long:  "Manage SonarQube integrations for code quality analysis",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				cmd.Help()
+				os.Exit(0)
+			}
+		},
+	}
+	
+	cmd.AddCommand(
+		&cobra.Command{
+			Use:   "analyze [project]",
+			Short: "Analyze a project with SonarQube",
+			Args:  cobra.MinimumNArgs(1),
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Printf("Analyzing project %s with SonarQube...\n", args[0])
+			},
+		},
+		&cobra.Command{
+			Use:   "report [project]",
+			Short: "Get reports from SonarQube",
+			Args:  cobra.MinimumNArgs(1),
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Printf("Getting SonarQube reports for project %s...\n", args[0])
+			},
+		},
+		&cobra.Command{
+			Use:   "configure",
+			Short: "Configure SonarQube integration",
+			Run: func(cmd *cobra.Command, args []string) {
+				fmt.Println("Configuring SonarQube integration...")
 			},
 		},
 	)

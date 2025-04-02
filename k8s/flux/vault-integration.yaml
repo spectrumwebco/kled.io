@@ -1,0 +1,21 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: github-credentials
+  namespace: flux-system
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: github-credentials
+  data:
+  - secretKey: identity
+    remoteRef:
+      key: github/flux-identity
+      property: identity
+  - secretKey: known_hosts
+    remoteRef:
+      key: github/flux-identity
+      property: known_hosts
