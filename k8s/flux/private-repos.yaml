@@ -1,0 +1,64 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: kled
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/spectrumwebco/kled.git
+  ref:
+    branch: main
+  secretRef:
+    name: github-credentials
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: kled-pro
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/spectrumwebco/kled-pro.git
+  ref:
+    branch: main
+  secretRef:
+    name: github-credentials
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: kledspace
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/spectrumwebco/kledspace.git
+  ref:
+    branch: main
+  secretRef:
+    name: github-credentials
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: kpolicy
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/spectrumwebco/kpolicy.git
+  ref:
+    branch: main
+  secretRef:
+    name: github-credentials
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: kled-marketing
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/spectrumwebco/kled-marketing.git
+  ref:
+    branch: main
+  secretRef:
+    name: github-credentials
